@@ -1,6 +1,4 @@
 # go-serialization-benchmarks
-Benchmarks several Golang serializers. 
-
 In this benchmarks, all serializers use the same data. It is generated once and 
 then used by everyone. Also each serializer is described with a set of features.
 One serializer can have several benchmark results. For example, serializer mus
