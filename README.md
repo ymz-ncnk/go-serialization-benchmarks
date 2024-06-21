@@ -1,9 +1,11 @@
 # go-serialization-benchmarks
-In this benchmarks, all serializers use the same data. It is generated once and 
-then used by everyone. Also each serializer is described with a set of features.
-One serializer can have several benchmark results. For example, serializer mus
-can have `mus` and `mus+unsafe` results. The last one indicates that the results
-were obtained with the `unsafe` feature enabled.
+In this benchmarks:
+- All serializers use the same data, it is generated once and then used by 
+  everyone.
+- Each serializer is described with a set of features.
+- One serializer can have several benchmark results. For example, mus can have 
+  `mus` and `mus+unsafe` results. The last one indicates that the results were 
+  obtained with the `unsafe` feature enabled.
 
 # List of Features
 Each feature describes a serializer:
@@ -22,17 +24,17 @@ Features that must be in the result name when used:
 - `unsafestr` - it supports only unsafe string serialization.
 - `fixbuf` - if a fixed buffer is used.
 
-This list is not fixed and can be expanded.
+This list can be expanded.
 
 # Data
 Randomly generated data has the following form:
 ```go
 type Data struct {
-	Str     string
-	Bool    bool
-	Int32   int32
-	Float64 float64
-	Time    time.Time
+  Str     string
+  Bool    bool
+  Int32   int32
+  Float64 float64
+  Time    time.Time
 }
 ```
 It does not have an `int` type because many serializers do not support it.
@@ -70,7 +72,7 @@ a charger and the fan is running at full speed.
 
 # Contribution
 First of all, you need to create a new package for your serializer if it doesn't
-already exist.Then you have implement 
+already exist. Then you have implement 
 [serializer.Serializer\[serializer.Data\]](serializer/serializer.go) interface 
 (if you use own `Data` make shure it implements `EqualTo(data Data) error` 
 method, an example can be found in [serializer.Data](serializer/data.go)). Then 
@@ -93,19 +95,19 @@ Also, if you want to run benchmarks from your own project, there is the
 # Benchmarks
 |         NAME         | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
 |----------------------|------------------|-------|--------|------|-----------|
-| mus+reuse+unsafe     |         17677365 | 57.03 |     58 |    0 |         0 |
-| benc+reuse+unsafestr |         15267850 | 68.38 |     60 |    0 |         0 |
-| mus+unsafe           |         15048591 | 81.52 |     58 |   64 |         1 |
-| beebop200sc+reuse    |         13366515 | 84.58 |     61 |   48 |         1 |
-| benc+unsafestr       |         12774222 | 92.93 |     60 |   64 |         1 |
-| benc+reuse           |         12132196 | 93.81 |     60 |   48 |         1 |
-| mus+reuse            |          9877123 | 112.9 |     59 |   48 |         1 |
-| beebop200sc          |          9649923 | 114.9 |     61 |  112 |         2 |
-| benc                 |         11313277 | 121.5 |     64 |  112 |         2 |
-| mus                  |          7978897 | 150.2 |     59 |  112 |         2 |
-| protobuf             |          2159122 | 514.7 |     72 |  271 |         4 |
-| json                 |           417366 |  2712 |    150 |  600 |         9 |
-| gob                  |            67326 | 17724 |    159 | 9407 |       233 |
+| mus+reuse+unsafe     |         18217153 | 57.45 |     58 |    0 |         0 |
+| benc+reuse+unsafestr |         15374530 | 68.59 |     60 |    0 |         0 |
+| mus+unsafe           |         15077094 | 81.22 |     58 |   64 |         1 |
+| beebop200sc+reuse    |         13468102 | 84.88 |     61 |   48 |         1 |
+| benc+unsafestr       |         12760593 | 92.45 |     60 |   64 |         1 |
+| benc+reuse           |         12244098 | 93.47 |     60 |   48 |         1 |
+| mus+reuse            |          9771532 | 112.5 |     59 |   48 |         1 |
+| beebop200sc          |          9937228 |   114 |     61 |  112 |         2 |
+| benc                 |         11393307 | 120.9 |     64 |  112 |         2 |
+| mus                  |          8196427 | 147.6 |     59 |  112 |         2 |
+| protobuf             |          2165378 | 532.9 |     72 |  271 |         4 |
+| json                 |           415185 |  2770 |    150 |  600 |         9 |
+| gob                  |            66734 | 18190 |    159 | 9407 |       233 |
 
 , where `iterations count`, `ns/op`, `B/op`, `allocs/op` are standard 
 `go test -bench=.` results and `B/size` - determines how many bytes were used on 

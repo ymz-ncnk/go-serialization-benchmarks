@@ -1,11 +1,11 @@
 # go-serialization-benchmarks
-Benchmarks several Golang serializers. 
-
-In this benchmarks, all serializers use the same data. It is generated once and 
-then used by everyone. Also each serializer is described with a set of features.
-One serializer can have several benchmark results. For example, serializer mus
-can have `mus` and `mus+unsafe` results. The last one indicates that the results
-were obtained with the `unsafe` feature enabled.
+In this benchmarks:
+- All serializers use the same data, it is generated once and then used by 
+  everyone.
+- Each serializer is described with a set of features.
+- One serializer can have several benchmark results. For example, mus can have 
+  `mus` and `mus+unsafe` results. The last one indicates that the results were 
+  obtained with the `unsafe` feature enabled.
 
 # List of Features
 Each feature describes a serializer:
@@ -24,17 +24,17 @@ Features that must be in the result name when used:
 - `unsafestr` - it supports only unsafe string serialization.
 - `fixbuf` - if a fixed buffer is used.
 
-This list is not fixed and can be expanded.
+This list can be expanded.
 
 # Data
 Randomly generated data has the following form:
 ```go
 type Data struct {
-	Str     string
-	Bool    bool
-	Int32   int32
-	Float64 float64
-	Time    time.Time
+  Str     string
+  Bool    bool
+  Int32   int32
+  Float64 float64
+  Time    time.Time
 }
 ```
 It does not have an `int` type because many serializers do not support it.
@@ -72,7 +72,7 @@ a charger and the fan is running at full speed.
 
 # Contribution
 First of all, you need to create a new package for your serializer if it doesn't
-already exist.Then you have implement 
+already exist. Then you have implement 
 [serializer.Serializer\[serializer.Data\]](serializer/serializer.go) interface 
 (if you use own `Data` make shure it implements `EqualTo(data Data) error` 
 method, an example can be found in [serializer.Data](serializer/data.go)). Then 
