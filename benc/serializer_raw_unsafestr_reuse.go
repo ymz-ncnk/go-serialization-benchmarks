@@ -7,19 +7,21 @@ import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
-type SerializerUnsafeReuse struct {
+type SerializerRawUnsafeStrReuse struct {
 	bs []byte
 }
 
-func (s SerializerUnsafeReuse) Name() serializer.ResultName {
-	return serializer.NewResultName(Benc, serializer.UnsafeStr, serializer.Reuse)
+func (s SerializerRawUnsafeStrReuse) Name() serializer.ResultName {
+	return serializer.NewResultName(Benc, serializer.Raw, serializer.UnsafeStr,
+		serializer.Reuse)
 }
 
-func (s SerializerUnsafeReuse) Features() []serializer.Feature {
+func (s SerializerRawUnsafeStrReuse) Features() []serializer.Feature {
 	return Features
 }
 
-func (s SerializerUnsafeReuse) Marshal(data serializer.Data) (bs []byte, err error) {
+func (s SerializerRawUnsafeStrReuse) Marshal(data serializer.Data) (bs []byte,
+	err error) {
 	var n int
 	n, err = bstd.MarshalUnsafeString(n, s.bs, data.Str)
 	if err != nil {
@@ -33,7 +35,8 @@ func (s SerializerUnsafeReuse) Marshal(data serializer.Data) (bs []byte, err err
 	return
 }
 
-func (s SerializerUnsafeReuse) Unmarshal(bs []byte) (data serializer.Data, err error) {
+func (s SerializerRawUnsafeStrReuse) Unmarshal(bs []byte) (data serializer.Data,
+	err error) {
 	var (
 		n   int
 		n64 int64

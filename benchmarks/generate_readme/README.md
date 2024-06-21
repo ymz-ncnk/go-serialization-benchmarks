@@ -17,6 +17,7 @@ Each feature describes a serializer:
 - `text` - it has text serialization format.
 - `binary` -  it has binary serialization format.
 - `varint` - it supports varint encoding.
+- `raw` - it supports raw encoding.
 - `int` - it supports `int` type.
 
 Features that must be in the result name when used:

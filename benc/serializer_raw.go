@@ -10,17 +10,17 @@ import (
 
 const Benc = "benc"
 
-type Serializer struct{}
+type SerializerRaw struct{}
 
-func (s Serializer) Name() serializer.ResultName {
-	return serializer.NewResultName(Benc)
+func (s SerializerRaw) Name() serializer.ResultName {
+	return serializer.NewResultName(Benc, serializer.Raw)
 }
 
-func (s Serializer) Features() []serializer.Feature {
+func (s SerializerRaw) Features() []serializer.Feature {
 	return Features
 }
 
-func (s Serializer) Marshal(data serializer.Data) (bs []byte, err error) {
+func (s SerializerRaw) Marshal(data serializer.Data) (bs []byte, err error) {
 	n, err := bstd.SizeString(data.Str)
 	if err != nil {
 		return
@@ -41,7 +41,7 @@ func (s Serializer) Marshal(data serializer.Data) (bs []byte, err error) {
 	return
 }
 
-func (s Serializer) Unmarshal(bs []byte) (data serializer.Data, err error) {
+func (s SerializerRaw) Unmarshal(bs []byte) (data serializer.Data, err error) {
 	var (
 		n   int
 		n64 int64

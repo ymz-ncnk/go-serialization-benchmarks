@@ -11,6 +11,7 @@ const (
 	UnsafeStr Feature = "unsafestr"
 	NotUnsafe Feature = "notunsafe"
 	Varint    Feature = "varint"
+	Raw       Feature = "raw"
 	Int       Feature = "int"
 	FixBuf    Feature = "fixbuf"
 )

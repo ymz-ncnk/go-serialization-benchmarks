@@ -17,6 +17,7 @@ Each feature describes a serializer:
 - `text` - it has text serialization format.
 - `binary` -  it has binary serialization format.
 - `varint` - it supports varint encoding.
+- `raw` - it supports raw encoding.
 - `int` - it supports `int` type.
 
 Features that must be in the result name when used:
@@ -98,30 +99,31 @@ Also, if you want to run benchmarks from your own project, there is the
 # Benchmarks
 |            NAME             | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
 |-----------------------------|------------------|-------|--------|------|-----------|
-| mus+reuse+unsafe            |         17610296 | 58.02 |     58 |    0 |         0 |
-| benc+reuse+unsafestr        |         15161148 | 69.75 |     60 |    0 |         0 |
-| mus+unsafe                  |         14892512 | 81.61 |     58 |   64 |         1 |
-| beebop200sc+notunsafe+reuse |         13270548 | 84.52 |     61 |   48 |         1 |
-| benc+unsafestr              |         12957506 | 91.53 |     60 |   64 |         1 |
-| benc+reuse                  |         11744248 |  97.1 |     60 |   48 |         1 |
-| beebop200sc+notunsafe       |          9812706 | 112.3 |     61 |  112 |         2 |
-| mus+notunsafe               |         12524446 | 112.4 |     58 |  112 |         2 |
-| benc                        |         10632272 | 115.8 |     64 |  112 |         2 |
-| mus+reuse                   |          9704544 | 116.4 |     59 |   48 |         1 |
-| mus                         |          8126935 | 150.6 |     59 |  112 |         2 |
-| protobuf                    |          2063260 | 543.8 |     72 |  271 |         4 |
-| json                        |           414622 |  2705 |    150 |  600 |         9 |
-| gob                         |            67324 | 17705 |    159 | 9406 |       233 |
+| mus+reuse+unsafe            |         19166761 | 54.09 |     58 |    0 |         0 |
+| benc+raw+reuse+unsafestr    |         16120245 | 64.85 |     60 |    0 |         0 |
+| mus+unsafe                  |         15029932 | 76.07 |     58 |   64 |         1 |
+| beebop200sc+notunsafe+reuse |         14415860 | 80.93 |     61 |   48 |         1 |
+| benc+raw+unsafestr          |         13931768 | 86.42 |     60 |   64 |         1 |
+| benc+raw+reuse              |         12803295 | 88.86 |     60 |   48 |         1 |
+| beebop200sc+notunsafe       |         10792912 | 107.4 |     61 |  112 |         2 |
+| mus+raw                     |         11349844 | 108.8 |     58 |  112 |         2 |
+| benc+raw                    |         11482455 | 109.1 |     64 |  112 |         2 |
+| mus+notunsafe               |         12538363 | 109.2 |     58 |  112 |         2 |
+| mus+raw+reuse+varint        |          9939614 | 111.5 |     59 |   48 |         1 |
+| mus+raw+varint              |          8651398 | 141.6 |     59 |  112 |         2 |
+| protobuf                    |          2282629 | 494.9 |     72 |  271 |         4 |
+| json                        |           435903 |  2661 |    150 |  600 |         9 |
+| gob                         |            75913 | 16587 |    159 | 9407 |       233 |
 
 , where `iterations count`, `ns/op`, `B/op`, `allocs/op` are standard 
 `go test -bench=.` results and `B/size` - determines how many bytes were used on 
 average by the serializer to encode `Data`.
     
 # Features
-- benc: `binary`, `manual`, `reuse`, `unsafestr`
+- benc+raw: `binary`, `manual`, `raw`, `reuse`, `unsafestr`
 - beebop200sc+notunsafe: `binary`, `codegen`, `notunsafe`, `reuse`
 - gob: `binary`
 - json: `reflect`, `text`
-- mus: `binary`, `manual`, `reuse`, `unsafe`, `varint`
+- mus+raw: `binary`, `manual`, `raw`, `reuse`, `unsafe`, `varint`
 - protobuf: `binary`, `codegen`, `varint`
   

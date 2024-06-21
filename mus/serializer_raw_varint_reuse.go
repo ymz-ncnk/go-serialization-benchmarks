@@ -10,19 +10,20 @@ import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
-type SerializerReuse struct {
+type SerializerRawVarintReuse struct {
 	bs []byte
 }
 
-func (s SerializerReuse) Name() serializer.ResultName {
-	return serializer.NewResultName(MUS, serializer.Reuse)
+func (s SerializerRawVarintReuse) Name() serializer.ResultName {
+	return serializer.NewResultName(MUS, serializer.Raw, serializer.Varint,
+		serializer.Reuse)
 }
 
-func (s SerializerReuse) Features() []serializer.Feature {
+func (s SerializerRawVarintReuse) Features() []serializer.Feature {
 	return Features
 }
 
-func (s SerializerReuse) Marshal(data serializer.Data) (bs []byte, err error) {
+func (s SerializerRawVarintReuse) Marshal(data serializer.Data) (bs []byte, err error) {
 	n := ord.MarshalString(data.Str, s.bs)
 	n += ord.MarshalBool(data.Bool, s.bs[n:])
 	n += varint.MarshalInt32(data.Int32, s.bs[n:])
@@ -32,7 +33,7 @@ func (s SerializerReuse) Marshal(data serializer.Data) (bs []byte, err error) {
 	return
 }
 
-func (s SerializerReuse) Unmarshal(bs []byte) (data serializer.Data, err error) {
+func (s SerializerRawVarintReuse) Unmarshal(bs []byte) (data serializer.Data, err error) {
 	var (
 		n    int
 		n1   int
