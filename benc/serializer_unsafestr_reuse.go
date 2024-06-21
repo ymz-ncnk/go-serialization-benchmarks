@@ -12,7 +12,7 @@ type SerializerUnsafeReuse struct {
 }
 
 func (s SerializerUnsafeReuse) Name() serializer.ResultName {
-	return serializer.NewResultName(Benc, serializer.Unsafestr, serializer.Reuse)
+	return serializer.NewResultName(Benc, serializer.UnsafeStr, serializer.Reuse)
 }
 
 func (s SerializerUnsafeReuse) Features() []serializer.Feature {

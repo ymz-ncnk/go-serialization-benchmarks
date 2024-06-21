@@ -8,8 +8,8 @@ import (
 )
 
 var Serializers = []serializer.Serializer[Data]{
-	Serializer{},
-	SerializerReuse{bs: make([]byte, serializer.BufSize)},
+	SerializerNotUnsafe{},
+	SerializerNotUnsafeReuse{bs: make([]byte, serializer.BufSize)},
 }
 
 func (d Data) EqualTo(ad Data) error {

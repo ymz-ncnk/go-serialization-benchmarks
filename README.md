@@ -6,6 +6,7 @@ In this benchmarks:
 - One serializer can have several benchmark results. For example, mus can have 
   `mus` and `mus+unsafe` results. The last one indicates that the results were 
   obtained with the `unsafe` feature enabled.
+- Unmarshalled data are compared to the original data.
 
 # List of Features
 Each feature describes a serializer:
@@ -22,6 +23,8 @@ Features that must be in the result name when used:
 - `reuse` -  it supports buffer reuse.
 - `unsafe` - it supports unsafe code.
 - `unsafestr` - it supports only unsafe string serialization.
+- `notunsafe` - it uses the unsafe code for all types except `string` and copies
+  data on unmarshal.
 - `fixbuf` - if a fixed buffer is used.
 
 This list can be expanded.
@@ -93,21 +96,22 @@ Also, if you want to run benchmarks from your own project, there is the
 [benchser.BenchmarkSerializer(...)](benchser/benchser.go) function.
   
 # Benchmarks
-|         NAME         | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
-|----------------------|------------------|-------|--------|------|-----------|
-| mus+reuse+unsafe     |         18217153 | 57.45 |     58 |    0 |         0 |
-| benc+reuse+unsafestr |         15374530 | 68.59 |     60 |    0 |         0 |
-| mus+unsafe           |         15077094 | 81.22 |     58 |   64 |         1 |
-| beebop200sc+reuse    |         13468102 | 84.88 |     61 |   48 |         1 |
-| benc+unsafestr       |         12760593 | 92.45 |     60 |   64 |         1 |
-| benc+reuse           |         12244098 | 93.47 |     60 |   48 |         1 |
-| mus+reuse            |          9771532 | 112.5 |     59 |   48 |         1 |
-| beebop200sc          |          9937228 |   114 |     61 |  112 |         2 |
-| benc                 |         11393307 | 120.9 |     64 |  112 |         2 |
-| mus                  |          8196427 | 147.6 |     59 |  112 |         2 |
-| protobuf             |          2165378 | 532.9 |     72 |  271 |         4 |
-| json                 |           415185 |  2770 |    150 |  600 |         9 |
-| gob                  |            66734 | 18190 |    159 | 9407 |       233 |
+|            NAME             | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
+|-----------------------------|------------------|-------|--------|------|-----------|
+| mus+reuse+unsafe            |         17610296 | 58.02 |     58 |    0 |         0 |
+| benc+reuse+unsafestr        |         15161148 | 69.75 |     60 |    0 |         0 |
+| mus+unsafe                  |         14892512 | 81.61 |     58 |   64 |         1 |
+| beebop200sc+notunsafe+reuse |         13270548 | 84.52 |     61 |   48 |         1 |
+| benc+unsafestr              |         12957506 | 91.53 |     60 |   64 |         1 |
+| benc+reuse                  |         11744248 |  97.1 |     60 |   48 |         1 |
+| beebop200sc+notunsafe       |          9812706 | 112.3 |     61 |  112 |         2 |
+| mus+notunsafe               |         12524446 | 112.4 |     58 |  112 |         2 |
+| benc                        |         10632272 | 115.8 |     64 |  112 |         2 |
+| mus+reuse                   |          9704544 | 116.4 |     59 |   48 |         1 |
+| mus                         |          8126935 | 150.6 |     59 |  112 |         2 |
+| protobuf                    |          2063260 | 543.8 |     72 |  271 |         4 |
+| json                        |           414622 |  2705 |    150 |  600 |         9 |
+| gob                         |            67324 | 17705 |    159 | 9406 |       233 |
 
 , where `iterations count`, `ns/op`, `B/op`, `allocs/op` are standard 
 `go test -bench=.` results and `B/size` - determines how many bytes were used on 
@@ -115,7 +119,7 @@ average by the serializer to encode `Data`.
     
 # Features
 - benc: `binary`, `manual`, `reuse`, `unsafestr`
-- beebop200sc: `binary`, `codegen`, `reuse`
+- beebop200sc+notunsafe: `binary`, `codegen`, `notunsafe`, `reuse`
 - gob: `binary`
 - json: `reflect`, `text`
 - mus: `binary`, `manual`, `reuse`, `unsafe`, `varint`

@@ -6,5 +6,5 @@ var Features = []serializer.Feature{
 	serializer.Manual,
 	serializer.Binary,
 	serializer.Reuse,
-	serializer.Unsafestr,
+	serializer.UnsafeStr,
 }

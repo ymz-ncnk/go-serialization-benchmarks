@@ -7,4 +7,5 @@ var Serializers = []serializer.Serializer[serializer.Data]{
 	SerializerReuse{make([]byte, serializer.BufSize)},
 	SerializerUnsafe{},
 	SerializerUnsafeReuse{make([]byte, serializer.BufSize)},
+	SerializerNotUnsafe{},
 }

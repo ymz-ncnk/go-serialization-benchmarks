@@ -6,6 +6,7 @@ In this benchmarks:
 - One serializer can have several benchmark results. For example, mus can have 
   `mus` and `mus+unsafe` results. The last one indicates that the results were 
   obtained with the `unsafe` feature enabled.
+- Unmarshalled data are compared to the original data.
 
 # List of Features
 Each feature describes a serializer:
@@ -22,6 +23,8 @@ Features that must be in the result name when used:
 - `reuse` -  it supports buffer reuse.
 - `unsafe` - it supports unsafe code.
 - `unsafestr` - it supports only unsafe string serialization.
+- `notunsafe` - it uses the unsafe code for all types except `string` and copies
+  data on unmarshal.
 - `fixbuf` - if a fixed buffer is used.
 
 This list can be expanded.

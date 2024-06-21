@@ -11,7 +11,7 @@ import (
 type SerializerUnsafe struct{}
 
 func (s SerializerUnsafe) Name() serializer.ResultName {
-	return serializer.NewResultName(Benc, serializer.Unsafestr)
+	return serializer.NewResultName(Benc, serializer.UnsafeStr)
 }
 
 func (s SerializerUnsafe) Features() []serializer.Feature {
