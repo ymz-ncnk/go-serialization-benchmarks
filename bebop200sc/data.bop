@@ -1,0 +1,7 @@
+struct Data {
+	string str;
+	bool bool;
+	int32 int32;
+	float64 float64;
+	date time;
+}
