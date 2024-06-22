@@ -8,16 +8,24 @@ import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
-func MakeFeaturesList() (featuresList []string) {
-	serializers, err := benchmarks.FirstOneSerializers()
+func MakeFeaturesList() (featuresList []string, err error) {
+	descs, err := benchmarks.FirstOneSerializerDescs()
 	if err != nil {
 		return
 	}
 	featuresList = []string{}
-	for i := 0; i < len(serializers); i++ {
-		s := serializers[i]
+	var (
+		desc           serializer.SerializerDesc
+		serializerName string
+	)
+	for i := 0; i < len(descs); i++ {
+		desc = descs[i]
+		serializerName, err = desc.Name().SerializerName()
+		if err != nil {
+			return
+		}
 		featuresList = append(featuresList,
-			string(s.Name())+": "+strings.Join(featuresToStrs(s.Features()), ", "))
+			serializerName+": "+strings.Join(featuresToStrs(desc.Features()), ", "))
 	}
 	sort.Slice(featuresList, func(i, j int) bool {
 		return featuresList[i][0] < featuresList[j][0]

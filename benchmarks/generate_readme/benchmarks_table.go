@@ -77,7 +77,7 @@ func ParseBenchmarksTable(bs []byte) (table BenchmarksTable, err error) {
 func ParseName(str string) (name string, err error) {
 	strs := NameRegexp.FindStringSubmatch(str)
 	if len(strs) != 2 {
-		err = errors.New("NameRegexp failed to find value")
+		err = errors.New("NameRegexp failed to find a value")
 		return
 	}
 	name = strs[1]
@@ -87,7 +87,7 @@ func ParseName(str string) (name string, err error) {
 func ParseIterationsCount(str string) (iterationsCount int, err error) {
 	strs := IterationsCountRegexp.FindStringSubmatch(str)
 	if len(strs) != 2 {
-		err = errors.New("IterationsCountRegexp failed to find value")
+		err = errors.New("IterationsCountRegexp failed to find a value")
 		return
 	}
 	return strconv.Atoi(strs[1])
@@ -96,7 +96,7 @@ func ParseIterationsCount(str string) (iterationsCount int, err error) {
 func ParseNsOp(str string) (nsOp float64, err error) {
 	strs := NsOpRegexp.FindStringSubmatch(str)
 	if len(strs) != 2 {
-		err = errors.New("NsOpRegexp failed to find value")
+		err = errors.New("NsOpRegexp failed to find a value")
 		return
 	}
 	return strconv.ParseFloat(strs[1], 64)
@@ -105,7 +105,7 @@ func ParseNsOp(str string) (nsOp float64, err error) {
 func ParseBSize(str string) (bSize float64, err error) {
 	strs := BSizeRegexp.FindStringSubmatch(str)
 	if len(strs) != 2 {
-		err = errors.New("BSizeRegexp failed to find value")
+		err = errors.New("BSizeRegexp failed to find a value")
 		return
 	}
 	return strconv.ParseFloat(strs[1], 64)
@@ -114,7 +114,7 @@ func ParseBSize(str string) (bSize float64, err error) {
 func ParseBOp(str string) (bOp int, err error) {
 	strs := BOpRegexp.FindStringSubmatch(str)
 	if len(strs) != 2 {
-		err = errors.New("BOpRegexp failed to find value")
+		err = errors.New("BOpRegexp failed to find a value")
 		return
 	}
 	return strconv.Atoi(strs[1])
@@ -123,7 +123,7 @@ func ParseBOp(str string) (bOp int, err error) {
 func ParseAllocsOp(str string) (allocsOp int, err error) {
 	strs := AllocsOpRegexp.FindStringSubmatch(str)
 	if len(strs) != 2 {
-		err = errors.New("AllocsOpRegexp failed to find value")
+		err = errors.New("AllocsOpRegexp failed to find a value")
 		return
 	}
 	return strconv.Atoi(strs[1])

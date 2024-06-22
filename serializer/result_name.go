@@ -1,13 +1,20 @@
 package serializer
 
-import "sort"
+import (
+	"errors"
+	"regexp"
+	"sort"
+)
 
 const ResultNameSeparator = "+"
 
-func NewResultName(resultName string, features ...Feature) ResultName {
+var SerializerNameRegexp = regexp.MustCompile(`(.+?)(?:\+|$)`)
+
+func NewResultName(serializerName string, features ...Feature) ResultName {
 	sort.Slice(features, func(i, j int) bool {
 		return features[i] < features[j]
 	})
+	resultName := serializerName
 	for i := 0; i < len(features); i++ {
 		resultName += ResultNameSeparator
 		resultName += string(features[i])
@@ -16,3 +23,13 @@ func NewResultName(resultName string, features ...Feature) ResultName {
 }
 
 type ResultName string
+
+func (r ResultName) SerializerName() (name string, err error) {
+	strs := SerializerNameRegexp.FindStringSubmatch(string(r))
+	if len(strs) != 2 {
+		err = errors.New("SerializerNameRegexp failed to find a value")
+		return
+	}
+	name = strs[1]
+	return
+}

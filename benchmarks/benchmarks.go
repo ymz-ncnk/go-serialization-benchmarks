@@ -14,7 +14,7 @@ import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
-func FirstOneSerializers() (serializers []serializer.SerializerDesc,
+func FirstOneSerializerDescs() (serializers []serializer.SerializerDesc,
 	err error) {
 	if len(json.Serializers) == 0 {
 		err = errors.New("json doesn't have any serializers")

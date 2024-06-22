@@ -5,14 +5,19 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 
 	md "github.com/nao1215/markdown"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
 const ReadmeFileName = "README.md"
 const (
-	BenchmarksTableName = "Benchmarks"
-	FeaturesTableName   = "Features"
+	BenchmarksSectionName        = "Benchmarks"
+	FastestsSafeSubsectionName   = "Fastest Safe"
+	FastestsUnsafeSubsectionName = "Fastest Unsafe"
+	AllSubsectionName            = "All"
+	FeaturesTableName            = "Features"
 )
 
 const (
@@ -59,6 +64,15 @@ func main() {
 	}
 
 	AddBenchmarksSectionToReadme(dst, table)
+	err = AddFastestSafeSubsectionToReadme(dst, table)
+	if err != nil {
+		panic(err)
+	}
+	err = AddFastestUnsafeSubsectionToReadme(dst, table)
+	if err != nil {
+		panic(err)
+	}
+	AddAllSubsectionToReadme(dst, table)
 	err = AddFeaturesSectionToReadme(dst)
 	if err != nil {
 		panic(err)
@@ -72,6 +86,36 @@ func RunBenchmarks() (out []byte, err error) {
 }
 
 func AddBenchmarksSectionToReadme(readmeFile *os.File, table BenchmarksTable) {
+	md.NewMarkdown(readmeFile).LF().LF().
+		H1(BenchmarksSectionName).LF().
+		Build()
+}
+
+func AddFastestSafeSubsectionToReadme(readmeFile *os.File, table BenchmarksTable) (
+	err error) {
+	filter := func(item SerializerItem) bool {
+		if strings.Contains(item.Name, string(serializer.Unsafe)) {
+			return !strings.Contains(item.Name, string(serializer.NotUnsafe))
+		}
+		return false
+	}
+	return addFastestSubsectionToReadme(readmeFile, FastestsSafeSubsectionName,
+		filter, table)
+}
+
+func AddFastestUnsafeSubsectionToReadme(readmeFile *os.File,
+	table BenchmarksTable) (err error) {
+	filter := func(item SerializerItem) bool {
+		if strings.Contains(item.Name, string(serializer.Unsafe)) {
+			return strings.Contains(item.Name, string(serializer.NotUnsafe))
+		}
+		return true
+	}
+	return addFastestSubsectionToReadme(readmeFile, FastestsUnsafeSubsectionName,
+		filter, table)
+}
+
+func AddAllSubsectionToReadme(readmeFile *os.File, table BenchmarksTable) {
 	tableSet := md.TableSet{
 		Header: []string{NameColumn, IterationsCountColumn, NsOpColumn,
 			BSizeColumn, BOpColumn, AllocsOpColumn},
@@ -89,16 +133,70 @@ func AddBenchmarksSectionToReadme(readmeFile *os.File, table BenchmarksTable) {
 		})
 	}
 	md.NewMarkdown(readmeFile).LF().
-		H1(BenchmarksTableName).
+		H2(AllSubsectionName).
 		Table(tableSet).
-		PlainText(ResultsExplanations).LF().
+		PlainText(ResultsExplanations).
 		Build()
 }
 
-func AddFeaturesSectionToReadme(readmeFile *os.File) (err error) {
+func addFastestSubsectionToReadme(readmeFile *os.File, sectionName string,
+	filter func(item SerializerItem) bool,
+	table BenchmarksTable,
+) (err error) {
+	tableSet := md.TableSet{
+		Header: []string{NameColumn, IterationsCountColumn, NsOpColumn,
+			BSizeColumn, BOpColumn, AllocsOpColumn},
+		Rows: [][]string{},
+	}
+	var (
+		fastests       = map[string]struct{}{}
+		fastestsTable  = []SerializerItem{}
+		item           SerializerItem
+		serializerName string
+	)
+	for i := 0; i < len(table); i++ {
+		item = table[i]
+		if filter(item) {
+			continue
+		}
+		serializerName, err = serializer.ResultName(item.Name).SerializerName()
+		if err != nil {
+			return
+		}
+		if _, pst := fastests[serializerName]; pst {
+			continue
+		}
+		fastestsTable = append(fastestsTable, item)
+		fastests[serializerName] = struct{}{}
+	}
+	var name string
+	for i := 0; i < len(fastestsTable); i++ {
+		item = fastestsTable[i]
+		name, _ = serializer.ResultName(item.Name).SerializerName()
+		tableSet.Rows = append(tableSet.Rows, []string{
+			name,
+			fmt.Sprintf("%v", item.IterationsCount),
+			fmt.Sprintf("%v", item.NsOp),
+			fmt.Sprintf("%v", item.BSize),
+			fmt.Sprintf("%v", item.BOp),
+			fmt.Sprintf("%v", item.AllocsOp),
+		})
+	}
 	md.NewMarkdown(readmeFile).LF().
+		H2(sectionName).
+		Table(tableSet).
+		Build()
+	return
+}
+
+func AddFeaturesSectionToReadme(readmeFile *os.File) (err error) {
+	featuresList, err := MakeFeaturesList()
+	if err != nil {
+		return
+	}
+	md.NewMarkdown(readmeFile).LF().LF().
 		H1(FeaturesTableName).
-		BulletList(MakeFeaturesList()...).LF().
+		BulletList(featuresList...).LF().
 		Build()
 	return
 }
