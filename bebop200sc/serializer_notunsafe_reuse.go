@@ -7,7 +7,7 @@ type SerializerNotUnsafeReuse struct {
 }
 
 func (s SerializerNotUnsafeReuse) Name() serializer.ResultName {
-	return serializer.NewResultName(Beebop200sc, serializer.NotUnsafe,
+	return serializer.NewResultName(Bebop200sc, serializer.NotUnsafe,
 		serializer.Reuse)
 }
 
