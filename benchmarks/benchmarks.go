@@ -20,7 +20,7 @@ func FirstOneSerializerDescs() (serializers []serializer.SerializerDesc,
 		err = errors.New("json doesn't have any serializers")
 	}
 	if len(gob.Serializers) == 0 {
-		err = errors.New("bog doesn't have any serializers")
+		err = errors.New("gob doesn't have any serializers")
 	}
 	if len(mus.Serializers) == 0 {
 		err = errors.New("mus doesn't have any serializers")
