@@ -7,8 +7,59 @@ In this benchmarks:
   `mus+raw` and `mus+unsafe` results. The first one indicates that the results
   were obtained with the `raw` feature enabled, the last one - that `unsafe` 
   feature was used.
-- Unmarshalled data are compared to the original data.
+- Unmarshalled data are compared to the original data.  
+  
+# Benchmarks  
+## Fastest Safe
+|    NAME    | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
+|------------|------------------|-------|--------|------|-----------|
+| mus        |         12995631 | 80.88 |     58 |   48 |         1 |
+| bebop200sc |         13129622 | 87.35 |     61 |   48 |         1 |
+| benc       |         11811676 |  96.5 |     60 |   48 |         1 |
+| protobuf   |          2514577 |   492 |     70 |  271 |         4 |
+| json       |           418201 |  2704 |    150 |  600 |         9 |
+| gob        |            67736 | 17729 |    159 | 9406 |       233 |
+  
+## Fastest Unsafe
+| NAME | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
+|------|------------------|-------|--------|------|-----------|
+| mus  |         17720740 | 57.88 |     58 |    0 |         0 |
+| benc |         14901884 | 70.03 |     60 |    0 |         0 |
+  
+## All
+|            NAME            | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
+|----------------------------|------------------|-------|--------|------|-----------|
+| mus+reuse+unsafe           |         17720740 | 57.88 |     58 |    0 |         0 |
+| benc+raw+reuse+unsafestr   |         14901884 | 70.03 |     60 |    0 |         0 |
+| mus+notunsafe+reuse        |         12995631 | 80.88 |     58 |   48 |         1 |
+| mus+unsafe                 |         14600960 | 82.24 |     58 |   64 |         1 |
+| bebop200sc+notunsafe+reuse |         13129622 | 87.35 |     61 |   48 |         1 |
+| benc+raw+unsafestr         |         13014684 | 91.23 |     60 |   64 |         1 |
+| mus+raw+reuse              |         11787232 |  95.2 |     58 |   48 |         1 |
+| benc+raw+reuse             |         11811676 |  96.5 |     60 |   48 |         1 |
+| bebop200sc+notunsafe       |          9731883 | 114.1 |     61 |  112 |         2 |
+| mus+notunsafe              |         12079314 | 114.5 |     58 |  112 |         2 |
+| mus+raw+reuse+varint       |          9229501 | 119.2 |     59 |   48 |         1 |
+| benc+raw                   |         10416484 | 122.8 |     64 |  112 |         2 |
+| mus+raw                    |          9737822 | 123.8 |     58 |  112 |         2 |
+| mus+raw+varint             |          7998292 |   157 |     59 |  112 |         2 |
+| protobuf+raw+varint        |          2514577 |   492 |     70 |  271 |         4 |
+| protobuf+raw               |          2248372 | 496.3 |     69 |  271 |         4 |
+| json                       |           418201 |  2704 |    150 |  600 |         9 |
+| gob                        |            67736 | 17729 |    159 | 9406 |       233 |
 
+, where `iterations count`, `ns/op`, `B/op`, `allocs/op` are standard 
+`go test -bench=.` output and `B/size` - determines how many bytes were used on 
+average by the serializer to encode `Data`.  
+  
+# Features
+- benc: `binary`, `manual`, `raw`, `reuse`, `unsafestr`
+- bebop200sc: `binary`, `codegen`, `notunsafe`, `reuse`
+- gob: `binary`, `int`
+- json: `int`, `reflect`, `text`
+- mus: `binary`, `int`, `manual`, `raw`, `reuse`, `unsafe`, `varint`
+- protobuf: `binary`, `codegen`, `raw`, `varint`
+  
 # List of Features
 Each feature describes a serializer:
 - `reflect` - it uses reflection.
@@ -96,57 +147,4 @@ already exist. Then:
 4. Create PR.
 
 If you want to run benchmarks from your own project, there is the
-[benchser.BenchmarkSerializer(...)](benchser/benchser.go) function.  
-  
-# Benchmarks
-    
-## Fastest Safe
-|    NAME    | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
-|------------|------------------|-------|--------|------|-----------|
-| mus        |         13862800 | 81.99 |     58 |   48 |         1 |
-| bebop200sc |         13151890 | 87.19 |     61 |   48 |         1 |
-| benc       |         11701960 | 96.93 |     60 |   48 |         1 |
-| protobuf   |          2258031 | 491.5 |     69 |  271 |         4 |
-| json       |           414747 |  2710 |    150 |  600 |         9 |
-| gob        |            67804 | 17744 |    159 | 9406 |       233 |
-  
-## Fastest Unsafe
-| NAME | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
-|------|------------------|-------|--------|------|-----------|
-| mus  |         17470657 | 58.92 |     58 |    0 |         0 |
-| benc |         14714232 | 69.89 |     60 |    0 |         0 |
-  
-## All
-|            NAME            | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
-|----------------------------|------------------|-------|--------|------|-----------|
-| mus+reuse+unsafe           |         17470657 | 58.92 |     58 |    0 |         0 |
-| benc+raw+reuse+unsafestr   |         14714232 | 69.89 |     60 |    0 |         0 |
-| mus+notunsafe+reuse        |         13862800 | 81.99 |     58 |   48 |         1 |
-| mus+unsafe                 |         14710707 | 82.56 |     58 |   64 |         1 |
-| bebop200sc+notunsafe+reuse |         13151890 | 87.19 |     61 |   48 |         1 |
-| benc+raw+unsafestr         |         12972586 | 90.79 |     60 |   64 |         1 |
-| mus+raw+reuse              |         11612329 | 95.12 |     58 |   48 |         1 |
-| benc+raw+reuse             |         11701960 | 96.93 |     60 |   48 |         1 |
-| mus+notunsafe              |         11838483 |   114 |     58 |  112 |         2 |
-| bebop200sc+notunsafe       |          9845310 | 114.3 |     61 |  112 |         2 |
-| mus+raw+reuse+varint       |          9233283 | 119.4 |     59 |   48 |         1 |
-| benc+raw                   |         10255844 | 123.2 |     64 |  112 |         2 |
-| mus+raw                    |          8951154 | 123.2 |     58 |  112 |         2 |
-| mus+raw+varint             |          7952072 | 157.4 |     59 |  112 |         2 |
-| protobuf+raw               |          2258031 | 491.5 |     69 |  271 |         4 |
-| protobuf+raw+varint        |          2488143 | 491.8 |     70 |  271 |         4 |
-| json                       |           414747 |  2710 |    150 |  600 |         9 |
-| gob                        |            67804 | 17744 |    159 | 9406 |       233 |
-
-, where `iterations count`, `ns/op`, `B/op`, `allocs/op` are standard 
-`go test -bench=.` results and `B/size` - determines how many bytes were used on 
-average by the serializer to encode `Data`.  
-  
-# Features
-- benc: `binary`, `manual`, `raw`, `reuse`, `unsafestr`
-- bebop200sc: `binary`, `codegen`, `notunsafe`, `reuse`
-- gob: `binary`, `int`
-- json: `int`, `reflect`, `text`
-- mus: `binary`, `int`, `manual`, `raw`, `reuse`, `unsafe`, `varint`
-- protobuf: `binary`, `codegen`, `raw`, `varint`
-  
+[benchser.BenchmarkSerializer(...)](benchser/benchser.go) function.

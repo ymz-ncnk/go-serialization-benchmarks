@@ -12,6 +12,12 @@ import (
 )
 
 const ReadmeFileName = "README.md"
+
+const (
+	IntroductionFileName = "introduction.md"
+	TailFileName         = "tail.md"
+)
+
 const (
 	BenchmarksSectionName        = "Benchmarks"
 	FastestsSafeSubsectionName   = "Fastest Safe"
@@ -30,7 +36,7 @@ const (
 )
 
 const ResultsExplanations = ", where `iterations count`, `ns/op`, `B/op`, `allocs/op` are standard \n" +
-	"`go test -bench=.` results and `B/size` - determines how many bytes were used on \n" +
+	"`go test -bench=.` output and `B/size` - determines how many bytes were used on \n" +
 	"average by the serializer to encode `Data`."
 
 //go:generate go run ./...
@@ -46,11 +52,11 @@ func main() {
 	}
 	SortBenchmarksTable(table)
 
-	src, err := os.Open(ReadmeFileName)
+	introduction, err := os.Open(IntroductionFileName)
 	if err != nil {
 		panic(err)
 	}
-	defer src.Close()
+	defer introduction.Close()
 
 	dst, err := os.Create("../../" + ReadmeFileName)
 	if err != nil {
@@ -58,7 +64,7 @@ func main() {
 	}
 	defer dst.Close()
 
-	_, err = io.Copy(dst, src)
+	_, err = io.Copy(dst, introduction)
 	if err != nil {
 		panic(err)
 	}
@@ -77,6 +83,16 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	tail, err := os.Open(TailFileName)
+	if err != nil {
+		panic(err)
+	}
+	defer tail.Close()
+	_, err = io.Copy(dst, tail)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func RunBenchmarks() (out []byte, err error) {
@@ -87,7 +103,7 @@ func RunBenchmarks() (out []byte, err error) {
 
 func AddBenchmarksSectionToReadme(readmeFile *os.File, table BenchmarksTable) {
 	md.NewMarkdown(readmeFile).LF().LF().
-		H1(BenchmarksSectionName).LF().
+		H1(BenchmarksSectionName).
 		Build()
 }
 
