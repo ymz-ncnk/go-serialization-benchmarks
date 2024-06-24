@@ -87,12 +87,12 @@ already exist. Then:
 2. If you use own `Data` make shure it implements `EqualTo(data Data) error` 
    method, also add `func ToYourData(data serializer.Data) (d Data)`
    function (an example can be found in [bbebop200sc/serializers.go](bebop200sc/serializers.go)).
-3. Define 
-  ```go
-  var Serializers = []serializer.Serializer[serializer.Data]{Serializer{}}
-  ```
-  variable. Note that it can contain several serializers that produce different
-  results.
+3. Define
+   ```go
+   var Serializers = []serializer.Serializer[serializer.Data]{Serializer{}}
+   ```
+   variable. Note that it can contain several serializers that produce different
+   results.
 4. Create PR.
 
 If you want to run benchmarks from your own project, there is the

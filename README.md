@@ -87,12 +87,12 @@ already exist. Then:
 2. If you use own `Data` make shure it implements `EqualTo(data Data) error` 
    method, also add `func ToYourData(data serializer.Data) (d Data)`
    function (an example can be found in [bbebop200sc/serializers.go](bebop200sc/serializers.go)).
-3. Define 
-  ```go
-  var Serializers = []serializer.Serializer[serializer.Data]{Serializer{}}
-  ```
-  variable. Note that it can contain several serializers that produce different
-  results.
+3. Define
+   ```go
+   var Serializers = []serializer.Serializer[serializer.Data]{Serializer{}}
+   ```
+   variable. Note that it can contain several serializers that produce different
+   results.
 4. Create PR.
 
 If you want to run benchmarks from your own project, there is the
@@ -103,40 +103,40 @@ If you want to run benchmarks from your own project, there is the
 ## Fastest Safe
 |    NAME    | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
 |------------|------------------|-------|--------|------|-----------|
-| mus        |         14901409 | 75.64 |     58 |   48 |         1 |
-| bebop200sc |         14359939 | 80.36 |     61 |   48 |         1 |
-| benc       |         12727911 | 90.77 |     60 |   48 |         1 |
-| protobuf   |          2687660 | 462.4 |     70 |  271 |         4 |
-| json       |           446530 |  2658 |    150 |  600 |         9 |
-| gob        |            76884 | 16294 |    159 | 9407 |       233 |
+| mus        |         13930108 | 81.47 |     58 |   48 |         1 |
+| bebop200sc |         13301229 | 86.06 |     61 |   48 |         1 |
+| benc       |         11678300 | 96.38 |     60 |   48 |         1 |
+| protobuf   |          2251184 | 495.8 |     69 |  271 |         4 |
+| json       |           420946 |  2700 |    150 |  600 |         9 |
+| gob        |            68149 | 17605 |    159 | 9407 |       233 |
   
 ## Fastest Unsafe
 | NAME | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
 |------|------------------|-------|--------|------|-----------|
-| mus  |         19302204 | 53.64 |     58 |    0 |         0 |
-| benc |         15993840 | 66.38 |     60 |    0 |         0 |
+| mus  |         17734369 | 58.56 |     58 |    0 |         0 |
+| benc |         14339090 |  71.8 |     60 |    0 |         0 |
   
 ## All
 |            NAME            | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
 |----------------------------|------------------|-------|--------|------|-----------|
-| mus+reuse+unsafe           |         19302204 | 53.64 |     58 |    0 |         0 |
-| benc+raw+reuse+unsafestr   |         15993840 | 66.38 |     60 |    0 |         0 |
-| mus+notunsafe+reuse        |         14901409 | 75.64 |     58 |   48 |         1 |
-| mus+unsafe                 |         15183380 | 76.55 |     58 |   64 |         1 |
-| bebop200sc+notunsafe+reuse |         14359939 | 80.36 |     61 |   48 |         1 |
-| benc+raw+unsafestr         |         14238708 |  84.9 |     60 |   64 |         1 |
-| mus+raw+reuse              |         12616003 |  89.3 |     58 |   48 |         1 |
-| benc+raw+reuse             |         12727911 | 90.77 |     60 |   48 |         1 |
-| bebop200sc+notunsafe       |         10670210 | 105.8 |     61 |  112 |         2 |
-| mus+notunsafe              |         13029286 | 106.9 |     58 |  112 |         2 |
-| mus+raw+reuse+varint       |         10079733 | 110.7 |     59 |   48 |         1 |
-| benc+raw                   |         11171600 | 113.9 |     64 |  112 |         2 |
-| mus+raw                    |         10679481 | 114.7 |     58 |  112 |         2 |
-| mus+raw+varint             |          8502360 | 146.3 |     59 |  112 |         2 |
-| protobuf+raw+varint        |          2687660 | 462.4 |     70 |  271 |         4 |
-| protobuf+raw               |          2420229 | 463.7 |     69 |  271 |         4 |
-| json                       |           446530 |  2658 |    150 |  600 |         9 |
-| gob                        |            76884 | 16294 |    159 | 9407 |       233 |
+| mus+reuse+unsafe           |         17734369 | 58.56 |     58 |    0 |         0 |
+| benc+raw+reuse+unsafestr   |         14339090 |  71.8 |     60 |    0 |         0 |
+| mus+notunsafe+reuse        |         13930108 | 81.47 |     58 |   48 |         1 |
+| mus+unsafe                 |         14865085 | 82.54 |     58 |   64 |         1 |
+| bebop200sc+notunsafe+reuse |         13301229 | 86.06 |     61 |   48 |         1 |
+| benc+raw+unsafestr         |         12595009 | 90.72 |     60 |   64 |         1 |
+| mus+raw+reuse              |         11779083 |  94.9 |     58 |   48 |         1 |
+| benc+raw+reuse             |         11678300 | 96.38 |     60 |   48 |         1 |
+| mus+notunsafe              |         12234646 |   114 |     58 |  112 |         2 |
+| bebop200sc+notunsafe       |          9760125 |   114 |     61 |  112 |         2 |
+| mus+raw+reuse+varint       |          9310642 | 120.2 |     59 |   48 |         1 |
+| mus+raw                    |          9811462 |   124 |     58 |  112 |         2 |
+| benc+raw                   |         10428548 | 124.4 |     64 |  112 |         2 |
+| mus+raw+varint             |          7848159 |   157 |     59 |  112 |         2 |
+| protobuf+raw               |          2251184 | 495.8 |     69 |  271 |         4 |
+| protobuf+raw+varint        |          2460822 | 501.6 |     70 |  271 |         4 |
+| json                       |           420946 |  2700 |    150 |  600 |         9 |
+| gob                        |            68149 | 17605 |    159 | 9407 |       233 |
 
 , where `iterations count`, `ns/op`, `B/op`, `allocs/op` are standard 
 `go test -bench=.` results and `B/size` - determines how many bytes were used on 
