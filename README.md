@@ -76,24 +76,25 @@ a charger and the fan is running at full speed.
 
 # Contribution
 First of all, you need to create a new package for your serializer if it doesn't
-already exist. Then you have implement 
-[serializer.Serializer\[serializer.Data\]](serializer/serializer.go) interface 
-(if you use own `Data` make shure it implements `EqualTo(data Data) error` 
-method, an example can be found in [serializer.Data](serializer/data.go)). Then 
-you have to define
-```go
-var Serializers = []serializer.Serializer[serializer.Data]{Serializer{}}
-```
-variable. Note that it can contain several serializers that produce different 
-results.
+already exist. Then:
+1. Implement [serializer.Serializer\[serializer.Data\]](serializer/serializer.go) 
+   interface. Doing this you can use:
+   - [serializer.NewResultName(...)](serializer/result_name.go) - which creates 
+     a correct result name.
+   - [serializer.BufSize](serializer/serializer.go) - defines the recommended 
+     buffer size for reuse.
+2. If you use own `Data` make shure it implements `EqualTo(data Data) error` 
+   method, also add `func ToYourDataData(data []serializer.Data) (d []Data)`
+   function (an example can be found in [bbebop200sc/serializers.go](bebop200sc/serializers.go)).
+3. Define 
+  ```go
+  var Serializers = []serializer.Serializer[serializer.Data]{Serializer{}}
+  ```
+  variable. Note that it can contain several serializers that produce different
+  results.
+4. Create PR.
 
-Doing this you can use:
-- [serializer.NewResultName(...)](serializer/result_name.go) - which creates a 
-  correct result name.
-- [serializer.BufSize](serializer/serializer.go) - defines the recommended 
-  buffer size for reuse.
-
-Also, if you want to run benchmarks from your own project, there is the
+If you want to run benchmarks from your own project, there is the
 [benchser.BenchmarkSerializer(...)](benchser/benchser.go) function.  
   
 # Benchmarks
