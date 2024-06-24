@@ -32,17 +32,12 @@ func (d Data) EqualTo(ad Data) error {
 	return nil
 }
 
-func ToBebop200scData(data []serializer.Data) (d []Data) {
-	l := len(data)
-	d = make([]Data, l)
-	for i := 0; i < l; i++ {
-		d[i] = Data{
-			Str:     data[i].Str,
-			Bool:    data[i].Bool,
-			Int32:   data[i].Int32,
-			Float64: data[i].Float64,
-			Time:    data[i].Time,
-		}
+func ToBebop200scData(data serializer.Data) (d Data) {
+	return Data{
+		Str:     data.Str,
+		Bool:    data.Bool,
+		Int32:   data.Int32,
+		Float64: data.Float64,
+		Time:    data.Time,
 	}
-	return
 }

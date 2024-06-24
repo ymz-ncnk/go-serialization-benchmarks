@@ -3,9 +3,10 @@ In this benchmarks:
 - All serializers use the same data, it is generated once and then used by 
   everyone.
 - Each serializer is described with a set of features.
-- One serializer can have several benchmark results. For example, mus can have 
-  `mus` and `mus+unsafe` results. The last one indicates that the results were 
-  obtained with the `unsafe` feature enabled.
+- One serializer can have several benchmark results. For example, MUS can have 
+  `mus+raw` and `mus+unsafe` results. The first one indicates that the results
+  were obtained with the `raw` feature enabled, the last one - that `unsafe` 
+  feature was used.
 - Unmarshalled data are compared to the original data.
 
 # List of Features
@@ -76,22 +77,23 @@ a charger and the fan is running at full speed.
 
 # Contribution
 First of all, you need to create a new package for your serializer if it doesn't
-already exist. Then you have implement 
-[serializer.Serializer\[serializer.Data\]](serializer/serializer.go) interface 
-(if you use own `Data` make shure it implements `EqualTo(data Data) error` 
-method, an example can be found in [serializer.Data](serializer/data.go)). Then 
-you have to define
-```go
-var Serializers = []serializer.Serializer[serializer.Data]{Serializer{}}
-```
-variable. Note that it can contain several serializers that produce different 
-results.
+already exist. Then:
+1. Implement [serializer.Serializer\[serializer.Data\]](serializer/serializer.go) 
+   interface. Doing this you can use:
+   - [serializer.NewResultName(...)](serializer/result_name.go) - which creates 
+     a correct result name.
+   - [serializer.BufSize](serializer/serializer.go) - defines the recommended 
+     buffer size for reuse.
+2. If you use own `Data` make shure it implements `EqualTo(data Data) error` 
+   method, also add `func ToYourData(data serializer.Data) (d Data)`
+   function (an example can be found in [bbebop200sc/serializers.go](bebop200sc/serializers.go)).
+3. Define 
+  ```go
+  var Serializers = []serializer.Serializer[serializer.Data]{Serializer{}}
+  ```
+  variable. Note that it can contain several serializers that produce different
+  results.
+4. Create PR.
 
-Doing this you can use:
-- [serializer.NewResultName(...)](serializer/result_name.go) - which creates a 
-  correct result name.
-- [serializer.BufSize](serializer/serializer.go) - defines the recommended 
-  buffer size for reuse.
-
-Also, if you want to run benchmarks from your own project, there is the
+If you want to run benchmarks from your own project, there is the
 [benchser.BenchmarkSerializer(...)](benchser/benchser.go) function.

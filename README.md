@@ -3,9 +3,10 @@ In this benchmarks:
 - All serializers use the same data, it is generated once and then used by 
   everyone.
 - Each serializer is described with a set of features.
-- One serializer can have several benchmark results. For example, mus can have 
-  `mus` and `mus+unsafe` results. The last one indicates that the results were 
-  obtained with the `unsafe` feature enabled.
+- One serializer can have several benchmark results. For example, MUS can have 
+  `mus+raw` and `mus+unsafe` results. The first one indicates that the results
+  were obtained with the `raw` feature enabled, the last one - that `unsafe` 
+  feature was used.
 - Unmarshalled data are compared to the original data.
 
 # List of Features
@@ -84,7 +85,7 @@ already exist. Then:
    - [serializer.BufSize](serializer/serializer.go) - defines the recommended 
      buffer size for reuse.
 2. If you use own `Data` make shure it implements `EqualTo(data Data) error` 
-   method, also add `func ToYourDataData(data []serializer.Data) (d []Data)`
+   method, also add `func ToYourData(data serializer.Data) (d Data)`
    function (an example can be found in [bbebop200sc/serializers.go](bebop200sc/serializers.go)).
 3. Define 
   ```go
@@ -102,39 +103,40 @@ If you want to run benchmarks from your own project, there is the
 ## Fastest Safe
 |    NAME    | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
 |------------|------------------|-------|--------|------|-----------|
-| mus        |         15362808 | 74.23 |     58 |   48 |         1 |
-| bebop200sc |         13755140 | 80.19 |     61 |   48 |         1 |
-| benc       |         12942796 | 87.47 |     60 |   48 |         1 |
-| protobuf   |          2391912 | 472.2 |     72 |  271 |         4 |
-| json       |           440336 |  2641 |    150 |  600 |         9 |
-| gob        |            74212 | 16587 |    159 | 9407 |       233 |
+| mus        |         14901409 | 75.64 |     58 |   48 |         1 |
+| bebop200sc |         14359939 | 80.36 |     61 |   48 |         1 |
+| benc       |         12727911 | 90.77 |     60 |   48 |         1 |
+| protobuf   |          2687660 | 462.4 |     70 |  271 |         4 |
+| json       |           446530 |  2658 |    150 |  600 |         9 |
+| gob        |            76884 | 16294 |    159 | 9407 |       233 |
   
 ## Fastest Unsafe
 | NAME | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
 |------|------------------|-------|--------|------|-----------|
-| mus  |         19820853 | 52.79 |     58 |    0 |         0 |
-| benc |         16222330 | 64.92 |     60 |    0 |         0 |
+| mus  |         19302204 | 53.64 |     58 |    0 |         0 |
+| benc |         15993840 | 66.38 |     60 |    0 |         0 |
   
 ## All
 |            NAME            | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
 |----------------------------|------------------|-------|--------|------|-----------|
-| mus+reuse+unsafe           |         19820853 | 52.79 |     58 |    0 |         0 |
-| benc+raw+reuse+unsafestr   |         16222330 | 64.92 |     60 |    0 |         0 |
-| mus+notunsafe+reuse        |         15362808 | 74.23 |     58 |   48 |         1 |
-| mus+unsafe                 |         15947325 | 75.99 |     58 |   64 |         1 |
-| bebop200sc+notunsafe+reuse |         13755140 | 80.19 |     61 |   48 |         1 |
-| benc+raw+unsafestr         |         12840576 | 85.86 |     60 |   64 |         1 |
-| mus+raw+reuse              |         13007331 | 87.47 |     58 |   48 |         1 |
-| benc+raw+reuse             |         12942796 | 87.47 |     60 |   48 |         1 |
-| mus+notunsafe              |         13439316 | 104.7 |     58 |  112 |         2 |
-| mus+raw+reuse+varint       |         10663248 | 105.1 |     59 |   48 |         1 |
-| bebop200sc+notunsafe       |         10837348 | 105.1 |     61 |  112 |         2 |
-| benc+raw                   |         11297887 |   113 |     64 |  112 |         2 |
-| mus+raw                    |         10502902 | 118.1 |     58 |  112 |         2 |
-| mus+raw+varint             |          8399648 | 143.1 |     59 |  112 |         2 |
-| protobuf                   |          2391912 | 472.2 |     72 |  271 |         4 |
-| json                       |           440336 |  2641 |    150 |  600 |         9 |
-| gob                        |            74212 | 16587 |    159 | 9407 |       233 |
+| mus+reuse+unsafe           |         19302204 | 53.64 |     58 |    0 |         0 |
+| benc+raw+reuse+unsafestr   |         15993840 | 66.38 |     60 |    0 |         0 |
+| mus+notunsafe+reuse        |         14901409 | 75.64 |     58 |   48 |         1 |
+| mus+unsafe                 |         15183380 | 76.55 |     58 |   64 |         1 |
+| bebop200sc+notunsafe+reuse |         14359939 | 80.36 |     61 |   48 |         1 |
+| benc+raw+unsafestr         |         14238708 |  84.9 |     60 |   64 |         1 |
+| mus+raw+reuse              |         12616003 |  89.3 |     58 |   48 |         1 |
+| benc+raw+reuse             |         12727911 | 90.77 |     60 |   48 |         1 |
+| bebop200sc+notunsafe       |         10670210 | 105.8 |     61 |  112 |         2 |
+| mus+notunsafe              |         13029286 | 106.9 |     58 |  112 |         2 |
+| mus+raw+reuse+varint       |         10079733 | 110.7 |     59 |   48 |         1 |
+| benc+raw                   |         11171600 | 113.9 |     64 |  112 |         2 |
+| mus+raw                    |         10679481 | 114.7 |     58 |  112 |         2 |
+| mus+raw+varint             |          8502360 | 146.3 |     59 |  112 |         2 |
+| protobuf+raw+varint        |          2687660 | 462.4 |     70 |  271 |         4 |
+| protobuf+raw               |          2420229 | 463.7 |     69 |  271 |         4 |
+| json                       |           446530 |  2658 |    150 |  600 |         9 |
+| gob                        |            76884 | 16294 |    159 | 9407 |       233 |
 
 , where `iterations count`, `ns/op`, `B/op`, `allocs/op` are standard 
 `go test -bench=.` results and `B/size` - determines how many bytes were used on 
@@ -146,5 +148,5 @@ average by the serializer to encode `Data`.
 - gob: `binary`
 - json: `reflect`, `text`
 - mus: `binary`, `manual`, `raw`, `reuse`, `unsafe`, `varint`
-- protobuf: `binary`, `codegen`, `varint`
+- protobuf: `binary`, `codegen`, `raw`, `varint`
   

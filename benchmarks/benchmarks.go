@@ -33,7 +33,7 @@ func FirstOneSerializerDescs() (serializers []serializer.SerializerDesc,
 	serializers = append(serializers, gob.Serializers[0])
 	serializers = append(serializers, mus.Serializers[0])
 	serializers = append(serializers, benc.Serializers[0])
-	serializers = append(serializers, protobuf.Serializers[0])
+	serializers = append(serializers, protobuf.SerializersRaw[0])
 	serializers = append(serializers, bebop200sc.Serializers[0])
 	return
 }
