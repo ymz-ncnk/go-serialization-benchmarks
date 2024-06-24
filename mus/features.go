@@ -9,4 +9,5 @@ var Features = []serializer.Feature{
 	serializer.Unsafe,
 	serializer.Varint,
 	serializer.Raw,
+	serializer.Int,
 }
