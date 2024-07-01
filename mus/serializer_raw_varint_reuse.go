@@ -24,7 +24,7 @@ func (s SerializerRawVarintReuse) Features() []serializer.Feature {
 }
 
 func (s SerializerRawVarintReuse) Marshal(data serializer.Data) (bs []byte, err error) {
-	n := ord.MarshalString(data.Str, s.bs)
+	n := ord.MarshalString(data.Str, nil, s.bs)
 	n += ord.MarshalBool(data.Bool, s.bs[n:])
 	n += varint.MarshalInt32(data.Int32, s.bs[n:])
 	n += varint.MarshalFloat64(data.Float64, s.bs[n:])
@@ -39,7 +39,7 @@ func (s SerializerRawVarintReuse) Unmarshal(bs []byte) (data serializer.Data, er
 		n1   int
 		nano int64
 	)
-	data.Str, n, err = ord.UnmarshalString(bs)
+	data.Str, n, err = ord.UnmarshalString(nil, bs)
 	if err != nil {
 		return
 	}

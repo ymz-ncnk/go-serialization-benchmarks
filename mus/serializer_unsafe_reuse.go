@@ -20,7 +20,7 @@ func (s SerializerUnsafeReuse) Features() []serializer.Feature {
 }
 
 func (s SerializerUnsafeReuse) Marshal(data serializer.Data) (bs []byte, err error) {
-	n := unsafe.MarshalString(data.Str, s.bs)
+	n := unsafe.MarshalString(data.Str, nil, s.bs)
 	n += unsafe.MarshalBool(data.Bool, s.bs[n:])
 	n += unsafe.MarshalInt32(data.Int32, s.bs[n:])
 	n += unsafe.MarshalFloat64(data.Float64, s.bs[n:])
@@ -35,7 +35,7 @@ func (s SerializerUnsafeReuse) Unmarshal(bs []byte) (data serializer.Data, err e
 		n1   int
 		nano int64
 	)
-	data.Str, n, err = unsafe.UnmarshalString(bs)
+	data.Str, n, err = unsafe.UnmarshalString(nil, bs)
 	if err != nil {
 		return
 	}

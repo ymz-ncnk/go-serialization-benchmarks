@@ -11,7 +11,9 @@ const Protobuf = "protobuf"
 
 var (
 	SerializersRaw       = []serializer.Serializer[*DataRaw]{SerializerRaw{}}
-	SerializersRawVarint = []serializer.Serializer[*DataRawVarint]{SerializerRawVarint{}}
+	SerializersRawVarint = []serializer.Serializer[*DataRawVarint]{
+		SerializerRawVarint{},
+	}
 )
 
 func (d *DataRaw) EqualTo(ad *DataRaw) error {

@@ -6,7 +6,7 @@ require (
 	github.com/200sc/bebop v0.6.0
 	github.com/brianvoe/gofakeit v3.18.0+incompatible
 	github.com/deneonet/benc v1.0.9
-	github.com/mus-format/mus-go v0.2.3
+	github.com/mus-format/mus-go v0.3.0
 	github.com/nao1215/markdown v0.5.0
 	google.golang.org/protobuf v1.34.2
 )

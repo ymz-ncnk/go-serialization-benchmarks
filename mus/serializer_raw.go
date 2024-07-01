@@ -20,13 +20,13 @@ func (s SerializerRaw) Features() []serializer.Feature {
 
 func (s SerializerRaw) Marshal(data serializer.Data) (bs []byte, err error) {
 	nano := data.Time.UnixNano()
-	n := ord.SizeString(data.Str)
+	n := ord.SizeString(data.Str, nil)
 	n += ord.SizeBool(data.Bool)
 	n += raw.SizeInt32(data.Int32)
 	n += raw.SizeFloat64(data.Float64)
 	n += raw.SizeInt64(nano)
 	bs = make([]byte, n)
-	n = ord.MarshalString(data.Str, bs)
+	n = ord.MarshalString(data.Str, nil, bs)
 	n += ord.MarshalBool(data.Bool, bs[n:])
 	n += raw.MarshalInt32(data.Int32, bs[n:])
 	n += raw.MarshalFloat64(data.Float64, bs[n:])
@@ -40,7 +40,7 @@ func (s SerializerRaw) Unmarshal(bs []byte) (data serializer.Data, err error) {
 		n1   int
 		nano int64
 	)
-	data.Str, n, err = ord.UnmarshalString(bs)
+	data.Str, n, err = ord.UnmarshalString(nil, bs)
 	if err != nil {
 		return
 	}
