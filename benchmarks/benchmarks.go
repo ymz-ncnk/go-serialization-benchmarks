@@ -11,6 +11,7 @@ import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/json"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/mus"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf_mus"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
@@ -45,6 +46,7 @@ func GeneralDataSerializers() (
 	serializers = append(serializers, gob.Serializers...)
 	serializers = append(serializers, mus.Serializers...)
 	serializers = append(serializers, benc.Serializers...)
+	serializers = append(serializers, protobuf_mus.Serializers...)
 	return
 }
 

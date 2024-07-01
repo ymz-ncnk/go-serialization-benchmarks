@@ -14,6 +14,7 @@ const (
 	Raw       Feature = "raw"
 	Int       Feature = "int"
 	FixBuf    Feature = "fixbuf"
+	Native    Feature = "native"
 )
 
 type Feature string

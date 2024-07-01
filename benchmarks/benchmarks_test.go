@@ -9,6 +9,7 @@ import (
 
 	"github.com/ymz-ncnk/go-serialization-benchmarks/bebop200sc"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf_mus"
 )
 
 const DataCount = 23000000
@@ -44,10 +45,14 @@ func benchmarkProtobuf(wantFeatures []serializer.Feature,
 		benchser.BenchmarkSerializer(protobuf.SerializersRaw[i], wantFeatures,
 			protobufDataRaw, b)
 	}
+	for i := 0; i < len(protobuf_mus.SerializersNative); i++ {
+		benchser.BenchmarkSerializer(protobuf_mus.SerializersNative[i],
+			wantFeatures, protobufDataRaw, b)
+	}
 	runtime.GC()
 
 	protobufDataRawVarint := toCustomData(data, protobuf.ToProtobufDataRawVarint)
-	for i := 0; i < len(protobuf.SerializersRaw); i++ {
+	for i := 0; i < len(protobuf.SerializersRawVarint); i++ {
 		benchser.BenchmarkSerializer(protobuf.SerializersRawVarint[i], wantFeatures,
 			protobufDataRawVarint, b)
 	}
