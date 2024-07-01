@@ -10,7 +10,7 @@ import (
 type Serializer struct{}
 
 func (s Serializer) Name() serializer.ResultName {
-	return serializer.NewResultName("gob")
+	return serializer.NewResultName(Gob)
 }
 
 func (s Serializer) Features() []serializer.Feature {

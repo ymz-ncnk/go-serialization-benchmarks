@@ -2,8 +2,6 @@ package bebop200sc
 
 import "github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 
-const Bebop200sc = "bebop200sc"
-
 type SerializerNotUnsafe struct{}
 
 func (s SerializerNotUnsafe) Name() serializer.ResultName {

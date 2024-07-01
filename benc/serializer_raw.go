@@ -8,8 +8,6 @@ import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
-const Benc = "benc"
-
 type SerializerRaw struct{}
 
 func (s SerializerRaw) Name() serializer.ResultName {

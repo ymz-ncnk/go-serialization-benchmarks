@@ -7,6 +7,8 @@ import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
+const Bebop200sc = "bebop200sc"
+
 var Serializers = []serializer.Serializer[Data]{
 	SerializerNotUnsafe{},
 	SerializerNotUnsafeReuse{bs: make([]byte, serializer.BufSize)},
