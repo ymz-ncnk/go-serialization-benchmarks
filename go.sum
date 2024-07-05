@@ -18,6 +18,8 @@ github.com/nao1215/markdown v0.5.0 h1:omlBdqyJvbDRK1k2plejv5jBTKQCsta8Atj2Q6xbtw
 github.com/nao1215/markdown v0.5.0/go.mod h1:ObBhnNduWwPN+bu4dtv4JoLRt57ONla7l//03iHIVhY=
 github.com/olekukonko/tablewriter v0.0.5 h1:P2Ga83D34wi1o9J6Wh1mRuqd4mF/x/lgBS7N7AbDhec=
 github.com/olekukonko/tablewriter v0.0.5/go.mod h1:hPp6KlRPjbx+hW8ykQs1w3UBbZlj6HuIJcUGPhkA7kY=
+github.com/planetscale/vtprotobuf v0.6.0 h1:nBeETjudeJ5ZgBHUz1fVHvbqUKnYOXNhsIEabROxmNA=
+github.com/planetscale/vtprotobuf v0.6.0/go.mod h1:t/avpk3KcrXxUnYOhZhMXJlSEyie6gQbtLq5NM3loB8=
 github.com/ymz-ncnk/mok v0.2.0 h1:4xOvkG0EXDlr05ZTSeRzM2q5mbyNbALRqRoI+cTwUyc=
 github.com/ymz-ncnk/mok v0.2.0/go.mod h1:VDVVGULp0vdJeD27SgJghOFGyD7w3nX7SDh8TOlvIsY=
 golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa h1:FRnLl4eNAQl8hwxVVC17teOw8kdjVDVAiFMtgUdTSRQ=

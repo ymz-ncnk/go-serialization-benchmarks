@@ -15,6 +15,7 @@ const (
 	Int       Feature = "int"
 	FixBuf    Feature = "fixbuf"
 	Native    Feature = "native"
+	UnsafeUnm Feature = "unsafeunm"
 )
 
 type Feature string

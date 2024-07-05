@@ -3,7 +3,7 @@ package protobuf;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/ymz-ncnk/go-serialization-benchmarks/protobuf";
+option go_package = "./protobuf";
 
 // protoc --go_out=. --go_opt=paths=source_relative ./protobuf/data_raw_varint.proto
 

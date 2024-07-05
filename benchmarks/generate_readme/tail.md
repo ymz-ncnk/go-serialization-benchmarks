@@ -10,13 +10,14 @@ Each feature describes a serializer:
 - `varint` - it supports varint encoding.
 - `raw` - it supports raw encoding.
 - `int` - it supports `int` type.
-- `native` - when one format is implemented by a serializer of another format 
-  and native data is used.
+- `native` - when a format is implemented with a set of primitives and native 
+  data is used.
 
 Features that must be in the result name when used:
 - `reuse` -  it supports buffer reuse.
 - `unsafe` - it supports unsafe code.
 - `unsafestr` - it supports only unsafe string serialization.
+- `unsafeunm` - it supports only unsafe unmarshalling.
 - `notunsafe` - it uses the unsafe code for all types except `string` and copies
   data on unmarshal.
 - `fixbuf` - if a fixed buffer is used.

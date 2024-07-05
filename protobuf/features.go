@@ -8,3 +8,12 @@ var Features = []serializer.Feature{
 	serializer.Raw,
 	serializer.Varint,
 }
+
+var VTFeatures = []serializer.Feature{
+	serializer.Binary,
+	serializer.Codegen,
+	serializer.Raw,
+	serializer.Varint,
+	serializer.UnsafeUnm,
+	serializer.Reuse,
+}

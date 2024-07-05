@@ -8,6 +8,7 @@ require (
 	github.com/deneonet/benc v1.0.9
 	github.com/mus-format/mus-go v0.4.1
 	github.com/nao1215/markdown v0.5.0
+	github.com/planetscale/vtprotobuf v0.6.0
 	google.golang.org/protobuf v1.34.2
 )
 

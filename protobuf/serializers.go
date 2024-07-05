@@ -9,10 +9,22 @@ import (
 
 const Protobuf = "protobuf"
 
+const VTProtobuf = "vtprotobuf"
+
 var (
-	SerializersRaw       = []serializer.Serializer[*DataRaw]{SerializerRaw{}}
+	SerializersRaw = []serializer.Serializer[*DataRaw]{
+		SerializerRaw{},
+		VTSerializerRaw{},
+		VTSerializerRawReuse{bs: make([]byte, serializer.BufSize)},
+		VTSerializerRawUnsafeUnm{},
+		VTSerializerRawUnsafeUnmReuse{bs: make([]byte, serializer.BufSize)},
+	}
 	SerializersRawVarint = []serializer.Serializer[*DataRawVarint]{
 		SerializerRawVarint{},
+		VTSerializerRawVarint{},
+		VTSerializerRawVarintReuse{bs: make([]byte, serializer.BufSize)},
+		VTSerializerRawVarintUnsafeUnm{},
+		VTSerializerRawVarintUnsafeUnmReuse{bs: make([]byte, serializer.BufSize)},
 	}
 )
 
