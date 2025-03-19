@@ -13,71 +13,72 @@ In this benchmarks:
 ## Fastest Safe
 |     NAME     | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
 |--------------|------------------|-------|--------|------|-----------|
-| mus          |         14082382 | 80.55 |     58 |   48 |         1 |
-| bebop200sc   |         13028316 | 85.52 |     61 |   48 |         1 |
-| benc         |         11802933 | 94.81 |     60 |   48 |         1 |
-| protobuf_mus |          6688456 |   163 |     69 |   48 |         1 |
-| vtprotobuf   |          6871676 | 191.3 |     69 |  192 |         3 |
-| protobuf     |          2460066 | 503.1 |     70 |  271 |         4 |
-| json         |           421777 |  2697 |    150 |  600 |         9 |
-| gob          |            66589 | 17880 |    159 | 9407 |       233 |
+| mus          |         11795019 | 95.47 |     58 |   48 |         1 |
+| bebop200sc   |         11282048 | 97.45 |     61 |   48 |         1 |
+| benc         |         10793390 | 103.8 |     60 |   48 |         1 |
+| vtprotobuf   |          7774521 | 169.4 |     69 |  192 |         3 |
+| protobuf_mus |          6391887 | 170.4 |     69 |   48 |         1 |
+| protobuf     |          2505753 | 452.1 |     69 |  271 |         4 |
+| json         |           453517 |  2621 |    150 |  600 |         9 |
+| gob          |            84352 | 15046 |    159 | 9493 |       195 |
   
 ## Fastest Unsafe
 |     NAME     | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
 |--------------|------------------|-------|--------|------|-----------|
-| mus          |         18103663 |    57 |     58 |    0 |         0 |
-| benc         |         14829669 | 69.76 |     60 |    0 |         0 |
-| protobuf_mus |          8152317 | 129.4 |     69 |    0 |         0 |
-| vtprotobuf   |          7640108 | 165.6 |     69 |  144 |         2 |
+| mus          |         15055489 | 70.29 |     58 |    0 |         0 |
+| benc         |         13512625 |  78.5 |     60 |    0 |         0 |
+| protobuf_mus |          7528129 | 141.8 |     69 |    0 |         0 |
+| vtprotobuf   |          7935742 |   143 |     70 |  144 |         2 |
   
 ## All
-|                 NAME                  | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
-|---------------------------------------|------------------|-------|--------|------|-----------|
-| mus+reuse+unsafe                      |         18103663 |    57 |     58 |    0 |         0 |
-| benc+raw+reuse+unsafestr              |         14829669 | 69.76 |     60 |    0 |         0 |
-| mus+notunsafe+reuse                   |         14082382 | 80.55 |     58 |   48 |         1 |
-| mus+unsafe                            |         14908098 | 81.72 |     58 |   64 |         1 |
-| bebop200sc+notunsafe+reuse            |         13028316 | 85.52 |     61 |   48 |         1 |
-| benc+raw+unsafestr                    |         12691201 | 92.63 |     60 |   64 |         1 |
-| mus+raw+reuse                         |         12016142 | 92.98 |     58 |   48 |         1 |
-| benc+raw+reuse                        |         11802933 | 94.81 |     60 |   48 |         1 |
-| bebop200sc+notunsafe                  |         10276396 |   108 |     61 |  112 |         2 |
-| mus+raw+reuse+varint                  |          9901872 | 112.2 |     59 |   48 |         1 |
-| mus+notunsafe                         |         12403351 | 113.3 |     58 |  112 |         2 |
-| mus+raw                               |          9719802 |   122 |     58 |  112 |         2 |
-| benc+raw                              |         10587306 | 122.1 |     64 |  112 |         2 |
-| protobuf_mus+reuse+unsafe             |          8152317 | 129.4 |     69 |    0 |         0 |
-| mus+raw+varint                        |          8684614 | 144.8 |     59 |  112 |         2 |
-| protobuf_mus+raw+reuse                |          6688456 |   163 |     69 |   48 |         1 |
-| vtprotobuf+raw+reuse+unsafeunm        |          7640108 | 165.6 |     69 |  144 |         2 |
-| vtprotobuf+raw+reuse+unsafeunm+varint |          7736064 | 174.1 |     70 |  144 |         2 |
-| protobuf_mus+raw+reuse+varint         |          5891563 |   186 |     70 |   48 |         1 |
-| protobuf_mus+unsafe                   |          6586830 | 187.4 |     69 |   79 |         1 |
-| vtprotobuf+raw+reuse                  |          6871676 | 191.3 |     69 |  192 |         3 |
-| protobuf_mus+native+reuse+unsafe      |          6588710 | 194.1 |     69 |  144 |         2 |
-| vtprotobuf+raw+reuse+varint           |          6774465 | 198.3 |     70 |  192 |         3 |
-| vtprotobuf+raw+unsafeunm              |          6554413 | 212.2 |     69 |  223 |         3 |
-| vtprotobuf+raw+unsafeunm+varint       |          6402992 | 218.7 |     70 |  223 |         3 |
-| vtprotobuf+raw                        |          6292698 | 227.9 |     69 |  271 |         4 |
-| protobuf_mus+raw                      |          5407700 | 231.8 |     69 |  127 |         2 |
-| protobuf_mus+raw+varint               |          5300852 | 243.2 |     70 |  127 |         2 |
-| vtprotobuf+raw+varint                 |          5882449 | 246.4 |     70 |  271 |         4 |
-| protobuf+raw+varint                   |          2460066 | 503.1 |     70 |  271 |         4 |
-| protobuf+raw                          |          2213274 | 504.4 |     69 |  271 |         4 |
-| json                                  |           421777 |  2697 |    150 |  600 |         9 |
-| gob                                   |            66589 | 17880 |    159 | 9407 |       233 |
+|                NAME                 | ITERATIONS COUNT | NS/OP | B/SIZE | B/OP | ALLOCS/OP |
+|-------------------------------------|------------------|-------|--------|------|-----------|
+| mus+reuse+unsafe                    |         15055489 | 70.29 |     58 |    0 |         0 |
+| benc+raw+reuse+unsafestr            |         13512625 |  78.5 |     60 |    0 |         0 |
+| mus+unsafe                          |         12787286 | 94.03 |     58 |   64 |         1 |
+| mus+notunsafe+reuse                 |         11795019 | 95.47 |     58 |   48 |         1 |
+| bebop200sc+notunsafe+reuse          |         11282048 | 97.45 |     61 |   48 |         1 |
+| benc+raw+unsafestr                  |         12117286 | 97.97 |     60 |   64 |         1 |
+| benc+raw+reuse                      |         10793390 | 103.8 |     60 |   48 |         1 |
+| mus+raw+reuse                       |         10430548 |   109 |     58 |   48 |         1 |
+| mus+notunsafe                       |         11046586 | 121.9 |     58 |  112 |         2 |
+| mus+reuse+varint                    |          9054440 | 122.6 |     58 |   48 |         1 |
+| mus+raw                             |         10465509 | 124.1 |     58 |  112 |         2 |
+| bebop200sc+notunsafe                |          8968006 |   129 |     61 |  112 |         2 |
+| benc+raw                            |          9251139 | 135.5 |     64 |  112 |         2 |
+| protobuf_mus+reuse+unsafe           |          7528129 | 141.8 |     69 |    0 |         0 |
+| vtprotobuf+reuse+unsafeunm+varint   |          7935742 |   143 |     70 |  144 |         2 |
+| vtprotobuf+raw+reuse+unsafeunm      |          8473729 | 143.5 |     69 |  144 |         2 |
+| mus+varint                          |          8519427 | 150.6 |     58 |  112 |         2 |
+| protobuf_mus+native+reuse+unsafe    |          7905327 | 167.1 |     69 |  144 |         2 |
+| vtprotobuf+raw+reuse                |          7774521 | 169.4 |     69 |  192 |         3 |
+| protobuf_mus+raw+reuse              |          6391887 | 170.4 |     69 |   48 |         1 |
+| protobuf_mus+native+reuse+unsafe#01 |          7853995 | 170.7 |     69 |  144 |         2 |
+| vtprotobuf+reuse+varint             |          7155690 | 180.4 |     70 |  192 |         3 |
+| protobuf_mus+reuse+varint           |          5802302 | 191.5 |     70 |   48 |         1 |
+| protobuf_mus+unsafe                 |          6207885 | 195.8 |     69 |   79 |         1 |
+| vtprotobuf+unsafeunm+varint         |          7210292 | 196.3 |     70 |  223 |         3 |
+| vtprotobuf+raw+unsafeunm            |          7316026 | 197.1 |     69 |  223 |         3 |
+| vtprotobuf+raw                      |          6619782 |   215 |     69 |  271 |         4 |
+| vtprotobuf+varint                   |          6376152 | 232.2 |     70 |  271 |         4 |
+| protobuf_mus+raw                    |          5035914 | 240.2 |     69 |  127 |         2 |
+| protobuf_mus+varint                 |          4998715 | 253.9 |     70 |  127 |         2 |
+| protobuf+raw                        |          2505753 | 452.1 |     69 |  271 |         4 |
+| protobuf+varint                     |          2798874 | 454.9 |     70 |  271 |         4 |
+| json                                |           453517 |  2621 |    150 |  600 |         9 |
+| gob                                 |            84352 | 15046 |    159 | 9493 |       195 |
 
 , where `iterations count`, `ns/op`, `B/op`, `allocs/op` are standard 
 `go test -bench=.` output and `B/size` - determines how many bytes were used on 
 average by the serializer to encode `Data`.  
   
 # Features
-- benc: `binary`, `manual`, `raw`, `reuse`, `unsafestr`
-- bebop200sc: `binary`, `codegen`, `notunsafe`, `reuse`
-- gob: `binary`, `int`
-- json: `int`, `reflect`, `text`
-- mus: `binary`, `int`, `manual`, `notunsafe`, `raw`, `reuse`, `unsafe`, `unsafestr`, `varint`
-- protobuf: `binary`, `codegen`, `raw`, `varint`
+- json: int,reflect,text
+- gob: binary,int
+- mus: binary,codegen,manual,varint,unsafestr,raw,reuse,unsafe,notunsafe
+- benc: manual,binary,reuse,unsafestr,raw
+- protobuf: binary,codegen,raw,varint
+- vtprotobuf: binary,codegen,raw,reuse,unsafeunm,varint
   
 # List of Features
 Each feature describes a serializer:

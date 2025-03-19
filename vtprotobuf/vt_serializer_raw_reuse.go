@@ -1,6 +1,7 @@
-package protobuf
+package vtprotobuf
 
 import (
+	data_proto "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
@@ -13,10 +14,11 @@ func (s VTSerializerRawReuse) Name() serializer.ResultName {
 }
 
 func (s VTSerializerRawReuse) Features() []serializer.Feature {
-	return Features
+	return append(GeneralFeatures, serializer.Raw, serializer.Reuse)
 }
 
-func (s VTSerializerRawReuse) Marshal(data *DataRaw) (bs []byte, err error) {
+func (s VTSerializerRawReuse) Marshal(data *data_proto.DataRaw) (bs []byte,
+	err error) {
 	n, err := data.MarshalToSizedBufferVT(s.bs)
 	if err != nil {
 		return
@@ -25,8 +27,9 @@ func (s VTSerializerRawReuse) Marshal(data *DataRaw) (bs []byte, err error) {
 	return
 }
 
-func (s VTSerializerRawReuse) Unmarshal(bs []byte) (data *DataRaw, err error) {
-	data = &DataRaw{}
+func (s VTSerializerRawReuse) Unmarshal(bs []byte) (data *data_proto.DataRaw,
+	err error) {
+	data = &data_proto.DataRaw{}
 	err = data.UnmarshalVT(bs)
 	return
 }

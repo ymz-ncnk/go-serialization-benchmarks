@@ -10,17 +10,17 @@ import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
-type SerializerMUSRaw struct{}
+type SerializerMUSVarint struct{}
 
-func (s SerializerMUSRaw) Name() serializer.ResultName {
-	return serializer.NewResultName(Protobuf, serializer.Raw)
+func (s SerializerMUSVarint) Name() serializer.ResultName {
+	return serializer.NewResultName(Protobuf, serializer.Varint)
 }
 
-func (s SerializerMUSRaw) Features() []serializer.Feature {
-	return append(GeneralFeatures, serializer.Raw)
+func (s SerializerMUSVarint) Features() []serializer.Feature {
+	return append(GeneralFeatures, serializer.Reuse)
 }
 
-func (s SerializerMUSRaw) Marshal(data general.Data) (bs []byte,
+func (s SerializerMUSVarint) Marshal(data general.Data) (bs []byte,
 	err error) {
 	var (
 		n         int
@@ -36,7 +36,7 @@ func (s SerializerMUSRaw) Marshal(data general.Data) (bs []byte,
 	}
 	if data.Int32 != 0 {
 		n += varint.Uint64.Size(int32FieldTag)
-		n += raw.Int32.Size(data.Int32)
+		n += varint.Int32.Size(data.Int32)
 	}
 	if data.Float64 != 0 {
 		n += varint.Uint64.Size(float64FieldTag)
@@ -60,7 +60,7 @@ func (s SerializerMUSRaw) Marshal(data general.Data) (bs []byte,
 	}
 	if data.Int32 != 0 {
 		n += varint.Uint64.Marshal(int32FieldTag, bs[n:])
-		n += raw.Int32.Marshal(data.Int32, bs[n:])
+		n += varint.Int32.Marshal(data.Int32, bs[n:])
 	}
 	if data.Float64 != 0 {
 		n += varint.Uint64.Marshal(float64FieldTag, bs[n:])
@@ -73,7 +73,7 @@ func (s SerializerMUSRaw) Marshal(data general.Data) (bs []byte,
 	return
 }
 
-func (s SerializerMUSRaw) Unmarshal(bs []byte) (data general.Data,
+func (s SerializerMUSVarint) Unmarshal(bs []byte) (data general.Data,
 	err error) {
 	var (
 		n, n1 int
@@ -92,7 +92,7 @@ func (s SerializerMUSRaw) Unmarshal(bs []byte) (data general.Data,
 		case boolFieldTag:
 			data.Bool, n1, err = ord.Bool.Unmarshal(bs[n:])
 		case int32FieldTag:
-			data.Int32, n1, err = raw.Int32.Unmarshal(bs[n:])
+			data.Int32, n1, err = varint.Int32.Unmarshal(bs[n:])
 		case float64FieldTag:
 			data.Float64, n1, err = raw.Float64.Unmarshal(bs[n:])
 		case timeFieldTag:

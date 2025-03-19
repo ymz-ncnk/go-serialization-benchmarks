@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/deneonet/benc/bstd"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
@@ -19,7 +20,7 @@ func (s SerializerRawReuse) Features() []serializer.Feature {
 	return Features
 }
 
-func (s SerializerRawReuse) Marshal(data serializer.Data) (bs []byte, err error) {
+func (s SerializerRawReuse) Marshal(data general.Data) (bs []byte, err error) {
 	var n int
 	n, err = bstd.MarshalString(n, s.bs, data.Str)
 	if err != nil {
@@ -33,7 +34,7 @@ func (s SerializerRawReuse) Marshal(data serializer.Data) (bs []byte, err error)
 	return
 }
 
-func (s SerializerRawReuse) Unmarshal(bs []byte) (data serializer.Data, err error) {
+func (s SerializerRawReuse) Unmarshal(bs []byte) (data general.Data, err error) {
 	var (
 		n   int
 		n64 int64

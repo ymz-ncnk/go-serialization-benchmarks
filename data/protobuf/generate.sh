@@ -1,4 +1,4 @@
-names=( data_raw data_raw_varint )
+names=( data_raw data_varint )
 gobin=/home/yra/prog/gopath/bin/
 
 for name in "${names[@]}"; do \

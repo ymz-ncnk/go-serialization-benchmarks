@@ -1,9 +1,8 @@
 package protobuf_mus
 
 import (
-	"github.com/mus-format/mus-go"
-	"github.com/mus-format/mus-go/varint"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	data_proto "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 	"google.golang.org/protobuf/encoding/protowire"
 )
@@ -18,29 +17,15 @@ var (
 	timeFieldTag    = protowire.EncodeTag(5, protowire.BytesType)
 )
 
-var (
-	lenM mus.MarshallerFn[int] = func(t int, bs []byte) (n int) {
-		return varint.MarshalPositiveInt32(int32(t), bs)
-	}
-	lenU mus.UnmarshallerFn[int] = func(bs []byte) (t int, n int, err error) {
-		t32, n, err := varint.UnmarshalPositiveInt32(bs)
-		t = int(t32)
-		return
-	}
-	lenS mus.SizerFn[int] = func(t int) (size int) {
-		return varint.SizePositiveInt32(int32(t))
-	}
-)
-
-var Serializers = []serializer.Serializer[serializer.Data]{
-	SerializerMUSRawVarint{},
-	SerializerMUSRawVarintReuse{bs: make([]byte, serializer.BufSize)},
+var Serializers = []serializer.Serializer[general.Data]{
+	SerializerMUSVarint{},
+	SerializerMUSVarintReuse{bs: make([]byte, serializer.BufSize)},
 	SerializerMUSRaw{},
 	SerializerMUSRawReuse{bs: make([]byte, serializer.BufSize)},
 	SerializerMUSUnsafe{},
 	SerializerMUSUnsafeReuse{bs: make([]byte, serializer.BufSize)},
 }
 
-var SerializersNative = []serializer.Serializer[*protobuf.DataRaw]{
+var SerializersNative = []serializer.Serializer[*data_proto.DataRaw]{
 	SerializerNativeUnsafeReuse{bs: make([]byte, serializer.BufSize)},
 }

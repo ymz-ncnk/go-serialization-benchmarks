@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
@@ -48,10 +49,10 @@ func ReportBSizeMetric[T any](s serializer.Serializer[T], d []T, b *testing.B) {
 	b.ReportMetric(float64(dataSize/b.N), "B/size")
 }
 
-func GenerateData(count int) (d []serializer.Data, err error) {
-	d = make([]serializer.Data, count)
-	for i := 0; i < len(d); i++ {
-		d[i] = serializer.Data{
+func GenerateData(count int) (d []general.Data, err error) {
+	d = make([]general.Data, count)
+	for i := range d {
+		d[i] = general.Data{
 			Str:     gofakeit.UUID(),
 			Bool:    gofakeit.Bool(),
 			Int32:   gofakeit.Int32(),
@@ -85,7 +86,7 @@ func doMarshalUnmarshalCheck[T Data[T]](s serializer.Serializer[T], d []T,
 }
 
 func hasFeatures(s serializer.SerializerDesc, features []serializer.Feature) bool {
-	for i := 0; i < len(features); i++ {
+	for i := range features {
 		if !slices.Contains(s.Features(), features[i]) {
 			return false
 		}

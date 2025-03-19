@@ -5,7 +5,7 @@ import (
 
 	"github.com/mus-format/mus-go/unsafe"
 	"github.com/mus-format/mus-go/varint"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf"
+	data_proto "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
@@ -19,68 +19,62 @@ func (s SerializerNativeUnsafeReuse) Name() serializer.ResultName {
 }
 
 func (s SerializerNativeUnsafeReuse) Features() []serializer.Feature {
-	return Features
+	return append(GeneralFeatures, serializer.Native, serializer.Unsafe,
+		serializer.Reuse)
 }
 
-func (s SerializerNativeUnsafeReuse) Marshal(data *protobuf.DataRaw) (bs []byte,
+func (s SerializerNativeUnsafeReuse) Marshal(data *data_proto.DataRaw) (bs []byte,
 	err error) {
 	var n int
 	if data.Str != "" {
-		n += varint.MarshalUint64(strFieldTag, s.bs[n:])
-		n += unsafe.MarshalString(data.Str, lenM, s.bs[n:])
+		n += varint.Uint64.Marshal(strFieldTag, s.bs[n:])
+		n += unsafe.String.Marshal(data.Str, s.bs[n:])
 	}
 	if data.Bool {
-		n += varint.MarshalUint64(boolFieldTag, s.bs[n:])
-		n += unsafe.MarshalBool(data.Bool, s.bs[n:])
+		n += varint.Uint64.Marshal(boolFieldTag, s.bs[n:])
+		n += unsafe.Bool.Marshal(data.Bool, s.bs[n:])
 	}
 	if data.Int32 != 0 {
-		n += varint.MarshalUint64(int32FieldTag, s.bs[n:])
-		n += unsafe.MarshalInt32(data.Int32, s.bs[n:])
+		n += varint.Uint64.Marshal(int32FieldTag, s.bs[n:])
+		n += unsafe.Int32.Marshal(data.Int32, s.bs[n:])
 	}
 	if data.Float64 != 0 {
-		n += varint.MarshalUint64(float64FieldTag, s.bs[n:])
-		n += unsafe.MarshalFloat64(data.Float64, s.bs[n:])
+		n += varint.Uint64.Marshal(float64FieldTag, s.bs[n:])
+		n += unsafe.Float64.Marshal(data.Float64, s.bs[n:])
 	}
-	if data.Time != nil && (data.Time.Seconds != 0 || data.Time.Nanos != 0) {
-		n += varint.MarshalUint64(timeFieldTag, s.bs[n:])
-		n += varint.MarshalPositiveInt(SizeTimestampNative(data.Time), s.bs[n:])
-		n += MarshalTimestampNative(data.Time, s.bs[n:])
+	if data.Time != nil {
+		n += varint.Uint64.Marshal(timeFieldTag, s.bs[n:])
+		n += TimestampNativeProtobuf.Marshal(data.Time, s.bs[n:])
 	}
 	bs = s.bs[:n]
 	return
 }
 
 func (s SerializerNativeUnsafeReuse) Unmarshal(bs []byte) (
-	data *protobuf.DataRaw, err error) {
+	data *data_proto.DataRaw, err error) {
 	var (
 		n, n1 int
 		l     = len(bs)
 		tag   uint64
 	)
-	data = &protobuf.DataRaw{}
+	data = &data_proto.DataRaw{}
 	for n < l {
-		tag, n1, err = varint.UnmarshalUint64(bs[n:])
+		tag, n1, err = varint.Uint64.Unmarshal(bs[n:])
 		n += n1
 		if err != nil {
 			return
 		}
 		switch tag {
 		case strFieldTag:
-			data.Str, n1, err = unsafe.UnmarshalString(lenU,
-				bs[n:])
+			data.Str, n1, err = unsafe.String.Unmarshal(bs[n:])
 		case boolFieldTag:
-			data.Bool, n1, err = unsafe.UnmarshalBool(bs[n:])
+			data.Bool, n1, err = unsafe.Bool.Unmarshal(bs[n:])
 		case int32FieldTag:
-			data.Int32, n1, err = unsafe.UnmarshalInt32(bs[n:])
+			data.Int32, n1, err = unsafe.Int32.Unmarshal(bs[n:])
 		case float64FieldTag:
-			data.Float64, n1, err = unsafe.UnmarshalFloat64(bs[n:])
+			data.Float64, n1, err = unsafe.Float64.Unmarshal(bs[n:])
 		case timeFieldTag:
-			_, n1, err = varint.UnmarshalPositiveInt(bs[n:])
-			n += n1
-			if err != nil {
-				return
-			}
-			data.Time, n1, err = UnmarshalTimestampNative(bs[n:])
+			data.Time, n1, err = TimestampNativeProtobuf.Unmarshal(bs[n:])
 		default:
 			err = fmt.Errorf("unexpected tag %v", tag)
 		}

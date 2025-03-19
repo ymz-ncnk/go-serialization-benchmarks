@@ -2,14 +2,9 @@ package mus
 
 import "github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 
-var Features = []serializer.Feature{
-	serializer.Manual,
+var GeneralFeatures = []serializer.Feature{
 	serializer.Binary,
-	serializer.Reuse,
-	serializer.NotUnsafe,
+	serializer.Codegen,
+	serializer.Manual,
 	serializer.UnsafeStr,
-	serializer.Unsafe,
-	serializer.Varint,
-	serializer.Raw,
-	serializer.Int,
 }

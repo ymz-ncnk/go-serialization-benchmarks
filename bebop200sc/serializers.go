@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
@@ -34,7 +35,7 @@ func (d Data) EqualTo(ad Data) error {
 	return nil
 }
 
-func ToBebop200scData(data serializer.Data) (d Data) {
+func ToBebop200scData(data general.Data) (d Data) {
 	return Data{
 		Str:     data.Str,
 		Bool:    data.Bool,

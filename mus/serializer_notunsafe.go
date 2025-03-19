@@ -1,10 +1,9 @@
 package mus
 
 import (
-	"time"
-
 	"github.com/mus-format/mus-go/ord"
 	"github.com/mus-format/mus-go/unsafe"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
@@ -15,54 +14,49 @@ func (s SerializerNotUnsafe) Name() serializer.ResultName {
 }
 
 func (s SerializerNotUnsafe) Features() []serializer.Feature {
-	return Features
+	return append(GeneralFeatures, serializer.NotUnsafe)
 }
 
-func (s SerializerNotUnsafe) Marshal(data serializer.Data) (bs []byte, err error) {
-	nano := data.Time.UnixNano()
-	n := ord.SizeString(data.Str, nil)
-	n += unsafe.SizeBool(data.Bool)
-	n += unsafe.SizeInt32(data.Int32)
-	n += unsafe.SizeFloat64(data.Float64)
-	n += unsafe.SizeInt64(nano)
+func (s SerializerNotUnsafe) Marshal(data general.Data) (bs []byte, err error) {
+	n := ord.String.Size(data.Str)
+	n += unsafe.Bool.Size(data.Bool)
+	n += unsafe.Int32.Size(data.Int32)
+	n += unsafe.Float64.Size(data.Float64)
+	n += unsafe.TimeUnixNanoUTC.Size(data.Time)
 	bs = make([]byte, n)
-	n = ord.MarshalString(data.Str, nil, bs)
-	n += unsafe.MarshalBool(data.Bool, bs[n:])
-	n += unsafe.MarshalInt32(data.Int32, bs[n:])
-	n += unsafe.MarshalFloat64(data.Float64, bs[n:])
-	unsafe.MarshalInt64(nano, bs[n:])
+	n = ord.String.Marshal(data.Str, bs)
+	n += unsafe.Bool.Marshal(data.Bool, bs[n:])
+	n += unsafe.Int32.Marshal(data.Int32, bs[n:])
+	n += unsafe.Float64.Marshal(data.Float64, bs[n:])
+	unsafe.TimeUnixNanoUTC.Marshal(data.Time, bs[n:])
 	return
 }
 
-func (s SerializerNotUnsafe) Unmarshal(bs []byte) (data serializer.Data, err error) {
+func (s SerializerNotUnsafe) Unmarshal(bs []byte) (data general.Data, err error) {
 	var (
-		n    int
-		n1   int
-		nano int64
+		n  int
+		n1 int
 	)
-	data.Str, n, err = ord.UnmarshalString(nil, bs)
+	data.Str, n, err = ord.String.Unmarshal(bs)
 	if err != nil {
 		return
 	}
-	data.Bool, n1, err = unsafe.UnmarshalBool(bs[n:])
+	data.Bool, n1, err = unsafe.Bool.Unmarshal(bs[n:])
 	n += n1
 	if err != nil {
 		return
 	}
-	data.Int32, n1, err = unsafe.UnmarshalInt32(bs[n:])
+	data.Int32, n1, err = unsafe.Int32.Unmarshal(bs[n:])
 	n += n1
 	if err != nil {
 		return
 	}
-	data.Float64, n1, err = unsafe.UnmarshalFloat64(bs[n:])
+	data.Float64, n1, err = unsafe.Float64.Unmarshal(bs[n:])
 	n += n1
 	if err != nil {
 		return
 	}
-	nano, _, err = unsafe.UnmarshalInt64(bs[n:])
-	if err != nil {
-		return
-	}
-	data.Time = time.Unix(0, nano)
+	data.Time, n, err = unsafe.TimeUnixNanoUTC.Unmarshal(bs[n:])
+	n += n1
 	return
 }

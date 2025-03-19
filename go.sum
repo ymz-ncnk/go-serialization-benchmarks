@@ -10,10 +10,10 @@ github.com/karrick/godirwalk v1.17.0 h1:b4kY7nqDdioR/6qnbHQyDvmA17u5G1cZ6J+CZXwS
 github.com/karrick/godirwalk v1.17.0/go.mod h1:j4mkqPuvaLI8mp1DroR3P6ad7cyYd4c1qeJ3RV7ULlk=
 github.com/mattn/go-runewidth v0.0.9 h1:Lm995f3rfxdpd6TSmuVCHVb/QhupuXlYr8sCI/QdE+0=
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
-github.com/mus-format/common-go v0.0.0-20240704141923-ea7d12c7eed3 h1:lq6NjZLxX27LghMjyTAZvt3c7Hi82VbhSuyTw3iYIDU=
-github.com/mus-format/common-go v0.0.0-20240704141923-ea7d12c7eed3/go.mod h1:1hTb8w0YdSGIOU6wNY+e9uXnDZ9OQnUivNtd8cPSdoU=
-github.com/mus-format/mus-go v0.4.1 h1:16XN+hxKes4Tz/qPNeG5jztCniZXs575WHOD9LTB3LI=
-github.com/mus-format/mus-go v0.4.1/go.mod h1:hs04lVPvkj2d0RC1k75yARNd3ZlVPpljAW64LwkgMJk=
+github.com/mus-format/common-go v0.0.0-20250307125743-867bbd6eb59c h1:axAH0WwqkZNIWZIyswO59y63JaymSi9kqy3yybhQTdI=
+github.com/mus-format/common-go v0.0.0-20250307125743-867bbd6eb59c/go.mod h1:1hTb8w0YdSGIOU6wNY+e9uXnDZ9OQnUivNtd8cPSdoU=
+github.com/mus-format/mus-go v0.6.1 h1:89D7SYxmjks3brCd/251s+wHvGJegZqA+c3y1Os5cm0=
+github.com/mus-format/mus-go v0.6.1/go.mod h1:SY5kTmvykop/jax/VtGf6vyjaunHkg5cAeiFgC1XJmY=
 github.com/nao1215/markdown v0.5.0 h1:omlBdqyJvbDRK1k2plejv5jBTKQCsta8Atj2Q6xbtwQ=
 github.com/nao1215/markdown v0.5.0/go.mod h1:ObBhnNduWwPN+bu4dtv4JoLRt57ONla7l//03iHIVhY=
 github.com/olekukonko/tablewriter v0.0.5 h1:P2Ga83D34wi1o9J6Wh1mRuqd4mF/x/lgBS7N7AbDhec=

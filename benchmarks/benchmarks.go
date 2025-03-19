@@ -5,43 +5,85 @@ import (
 	"flag"
 	"strings"
 
-	"github.com/ymz-ncnk/go-serialization-benchmarks/bebop200sc"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benc"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/gob"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/json"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/mus"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf_mus"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/vtprotobuf"
 )
 
-func FirstOneSerializerDescs() (serializers []serializer.SerializerDesc,
-	err error) {
+func AllSerializers() (serializers []serializer.SerializerDesc, err error) {
+	serializers = []serializer.SerializerDesc{}
+
+	// json
 	if len(json.Serializers) == 0 {
 		err = errors.New("json doesn't have any serializers")
 	}
+	for i := range json.Serializers {
+		serializers = append(serializers, json.Serializers[i])
+	}
+
+	// gob
 	if len(gob.Serializers) == 0 {
 		err = errors.New("gob doesn't have any serializers")
 	}
+	for i := range gob.Serializers {
+		serializers = append(serializers, gob.Serializers[i])
+	}
+
+	// mus
 	if len(mus.Serializers) == 0 {
 		err = errors.New("mus doesn't have any serializers")
 	}
+	for i := range mus.Serializers {
+		serializers = append(serializers, mus.Serializers[i])
+	}
+
+	// benc
 	if len(benc.Serializers) == 0 {
 		err = errors.New("benc doesn't have any serializers")
 	}
-	serializers = []serializer.SerializerDesc{}
-	serializers = append(serializers, json.Serializers[0])
-	serializers = append(serializers, gob.Serializers[0])
-	serializers = append(serializers, mus.Serializers[0])
-	serializers = append(serializers, benc.Serializers[0])
-	serializers = append(serializers, protobuf.SerializersRaw[0])
-	serializers = append(serializers, bebop200sc.Serializers[0])
+	for i := range benc.Serializers {
+		serializers = append(serializers, benc.Serializers[i])
+	}
+
+	// protobuf
+	if len(protobuf.SerializersRaw) == 0 {
+		err = errors.New("protobuf doesn't have any serializers")
+	}
+	for i := range protobuf.SerializersRaw {
+		serializers = append(serializers, protobuf.SerializersRaw[i])
+	}
+	if len(protobuf.SerializersVarint) == 0 {
+		err = errors.New("protobuf doesn't have any serializers")
+	}
+	for i := range protobuf.SerializersVarint {
+		serializers = append(serializers, protobuf.SerializersVarint[i])
+	}
+
+	// vtprotobuf
+	if len(vtprotobuf.SerializersRaw) == 0 {
+		err = errors.New("vtprotobuf doesn't have any serializers")
+	}
+	for i := range vtprotobuf.SerializersRaw {
+		serializers = append(serializers, vtprotobuf.SerializersRaw[i])
+	}
+	if len(vtprotobuf.SerializersVarint) == 0 {
+		err = errors.New("vtprotobuf doesn't have any serializers")
+	}
+	for i := range vtprotobuf.SerializersVarint {
+		serializers = append(serializers, vtprotobuf.SerializersVarint[i])
+	}
 	return
 }
 
 func GeneralDataSerializers() (
-	serializers []serializer.Serializer[serializer.Data]) {
-	serializers = []serializer.Serializer[serializer.Data]{}
+	serializers []serializer.Serializer[general.Data]) {
+	serializers = []serializer.Serializer[general.Data]{}
 	serializers = append(serializers, json.Serializers...)
 	serializers = append(serializers, gob.Serializers...)
 	serializers = append(serializers, mus.Serializers...)
@@ -66,7 +108,7 @@ func parseFeatures() (features []serializer.Feature, err error) {
 		l    = len(strs)
 	)
 	features = make([]serializer.Feature, l)
-	for i := 0; i < l; i++ {
+	for i := range l {
 		features[i] = serializer.Feature(strs[i])
 	}
 	return

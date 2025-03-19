@@ -5,6 +5,7 @@ import (
 
 	"github.com/deneonet/benc"
 	"github.com/deneonet/benc/bstd"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
@@ -18,7 +19,7 @@ func (s SerializerRaw) Features() []serializer.Feature {
 	return Features
 }
 
-func (s SerializerRaw) Marshal(data serializer.Data) (bs []byte, err error) {
+func (s SerializerRaw) Marshal(data general.Data) (bs []byte, err error) {
 	n, err := bstd.SizeString(data.Str)
 	if err != nil {
 		return
@@ -39,7 +40,7 @@ func (s SerializerRaw) Marshal(data serializer.Data) (bs []byte, err error) {
 	return
 }
 
-func (s SerializerRaw) Unmarshal(bs []byte) (data serializer.Data, err error) {
+func (s SerializerRaw) Unmarshal(bs []byte) (data general.Data, err error) {
 	var (
 		n   int
 		n64 int64

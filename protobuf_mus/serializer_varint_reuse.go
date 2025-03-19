@@ -10,19 +10,19 @@ import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
-type SerializerMUSRawReuse struct {
+type SerializerMUSVarintReuse struct {
 	bs []byte
 }
 
-func (s SerializerMUSRawReuse) Name() serializer.ResultName {
-	return serializer.NewResultName(Protobuf, serializer.Raw, serializer.Reuse)
+func (s SerializerMUSVarintReuse) Name() serializer.ResultName {
+	return serializer.NewResultName(Protobuf, serializer.Varint, serializer.Reuse)
 }
 
-func (s SerializerMUSRawReuse) Features() []serializer.Feature {
-	return append(GeneralFeatures, serializer.Raw, serializer.Reuse)
+func (s SerializerMUSVarintReuse) Features() []serializer.Feature {
+	return append(GeneralFeatures, serializer.Varint, serializer.Reuse)
 }
 
-func (s SerializerMUSRawReuse) Marshal(data general.Data) (bs []byte,
+func (s SerializerMUSVarintReuse) Marshal(data general.Data) (bs []byte,
 	err error) {
 	var (
 		n         int
@@ -38,7 +38,7 @@ func (s SerializerMUSRawReuse) Marshal(data general.Data) (bs []byte,
 	}
 	if data.Int32 != 0 {
 		n += varint.Uint64.Marshal(int32FieldTag, s.bs[n:])
-		n += raw.Int32.Marshal(data.Int32, s.bs[n:])
+		n += varint.Int32.Marshal(data.Int32, s.bs[n:])
 	}
 	if data.Float64 != 0 {
 		n += varint.Uint64.Marshal(float64FieldTag, s.bs[n:])
@@ -52,7 +52,7 @@ func (s SerializerMUSRawReuse) Marshal(data general.Data) (bs []byte,
 	return
 }
 
-func (s SerializerMUSRawReuse) Unmarshal(bs []byte) (data general.Data,
+func (s SerializerMUSVarintReuse) Unmarshal(bs []byte) (data general.Data,
 	err error) {
 	var (
 		n, n1 int
@@ -71,7 +71,7 @@ func (s SerializerMUSRawReuse) Unmarshal(bs []byte) (data general.Data,
 		case boolFieldTag:
 			data.Bool, n1, err = ord.Bool.Unmarshal(bs[n:])
 		case int32FieldTag:
-			data.Int32, n1, err = raw.Int32.Unmarshal(bs[n:])
+			data.Int32, n1, err = varint.Int32.Unmarshal(bs[n:])
 		case float64FieldTag:
 			data.Float64, n1, err = raw.Float64.Unmarshal(bs[n:])
 		case timeFieldTag:
