@@ -1,15 +1,21 @@
 package benc
 
 import (
+	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
 const Benc = "benc"
 
-var Serializers = []serializer.Serializer[general.Data]{
+var GeneralFeatures = []benchser.Feature{
+	benchser.Binary,
+	benchser.Codegen,
+	benchser.Manual,
+}
+
+var Serializers = []benchser.Serializer[general.Data]{
 	SerializerRaw{},
-	SerializerRawReuse{make([]byte, serializer.BufSize)},
+	SerializerRawReuse{make([]byte, benchser.BufSize)},
 	SerializerRawUnsafeStr{},
-	SerializerRawUnsafeStrReuse{make([]byte, serializer.BufSize)},
+	SerializerRawUnsafeStrReuse{make([]byte, benchser.BufSize)},
 }

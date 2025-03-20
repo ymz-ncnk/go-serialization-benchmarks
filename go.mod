@@ -5,13 +5,13 @@ go 1.23.5
 toolchain go1.24.1
 
 require (
-	github.com/200sc/bebop v0.6.0
+	github.com/200sc/bebop v0.6.2
 	github.com/brianvoe/gofakeit v3.18.0+incompatible
-	github.com/deneonet/benc v1.0.9
-	github.com/mus-format/mus-go v0.6.1
+	github.com/deneonet/benc v1.1.7
+	github.com/mus-format/mus-go v0.6.2
 	github.com/nao1215/markdown v0.5.0
 	github.com/planetscale/vtprotobuf v0.6.0
-	google.golang.org/protobuf v1.34.2
+	google.golang.org/protobuf v1.31.0
 )
 
 require (

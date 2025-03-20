@@ -1,10 +1,15 @@
 package gob
 
 import (
+	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
 const Gob = "gob"
 
-var Serializers = []serializer.Serializer[general.Data]{NewSerializer()}
+var GeneralFeatures = []benchser.Feature{
+	benchser.Binary,
+	benchser.Int,
+}
+
+var Serializers = []benchser.Serializer[general.Data]{NewSerializer()}

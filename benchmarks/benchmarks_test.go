@@ -5,13 +5,15 @@ import (
 	"testing"
 
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
+	data_bebop "github.com/ymz-ncnk/go-serialization-benchmarks/data/bebop"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
+	data_protobuf "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf"
+	data_protobuf_mus "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf_mus"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf_mus"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/vtprotobuf"
 
 	"github.com/ymz-ncnk/go-serialization-benchmarks/bebop200sc"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf_mus"
 )
 
 const DataCount = 20000000
@@ -27,71 +29,87 @@ func BenchmarkSerializers(b *testing.B) {
 	}
 	benchmarkGeneralDataSerializers(wantFeatures, data, b)
 	benchmarkProtobuf(wantFeatures, data, b)
+	benchmarkProtobufMUS(wantFeatures, data, b)
 	benchmarkVTProtobuf(wantFeatures, data, b)
 	benchmarkBebop200sc(wantFeatures, data, b)
 }
 
-func benchmarkGeneralDataSerializers(wantFeatures []serializer.Feature,
+func benchmarkGeneralDataSerializers(wantFeatures []benchser.Feature,
 	data []general.Data, b *testing.B) {
-	generalDataSerializers := GeneralDataSerializers()
-	for i := range generalDataSerializers {
-		benchser.BenchmarkSerializer(generalDataSerializers[i], wantFeatures, data,
-			b)
+	s := GeneralDataSerializers()
+	for i := range s {
+		benchser.BenchmarkSerializer(s[i], wantFeatures, data, b)
 	}
 }
 
-func benchmarkProtobuf(wantFeatures []serializer.Feature,
+func benchmarkProtobuf(wantFeatures []benchser.Feature,
 	data []general.Data, b *testing.B) {
-	protobufDataRaw := toCustomData(data, protobuf.ToProtobufDataRaw)
-	for i := range protobuf.SerializersRaw {
-		benchser.BenchmarkSerializer(protobuf.SerializersRaw[i], wantFeatures,
-			protobufDataRaw, b)
+	var (
+		dr = toCustomData(data, data_protobuf.ToProtobufDataRaw)
+		sr = protobuf.SerializersRaw
+	)
+	for i := range sr {
+		benchser.BenchmarkSerializer(sr[i], wantFeatures, dr, b)
 	}
 	runtime.GC()
-
-	for i := range protobuf_mus.SerializersNative {
-		benchser.BenchmarkSerializer(protobuf_mus.SerializersNative[i],
-			wantFeatures, protobufDataRaw, b)
-	}
-	runtime.GC()
-
-	protobufDataRawVarint := toCustomData(data, protobuf.ToProtobufDataRawVarint)
-	for i := range protobuf.SerializersVarint {
-		benchser.BenchmarkSerializer(protobuf.SerializersVarint[i], wantFeatures,
-			protobufDataRawVarint, b)
+	var (
+		dv = toCustomData(data, data_protobuf.ToProtobufDataVarint)
+		sv = protobuf.SerializersVarint
+	)
+	for i := range sv {
+		benchser.BenchmarkSerializer(sv[i], wantFeatures, dv, b)
 	}
 	runtime.GC()
 }
 
-func benchmarkVTProtobuf(wantFeatures []serializer.Feature,
-	data []general.Data, b *testing.B) {
-	protobufDataRaw := toCustomData(data, vtprotobuf.ToProtobufDataRaw)
-	for i := range vtprotobuf.SerializersRaw {
-		benchser.BenchmarkSerializer(vtprotobuf.SerializersRaw[i], wantFeatures,
-			protobufDataRaw, b)
+func benchmarkVTProtobuf(wantFeatures []benchser.Feature, data []general.Data,
+	b *testing.B) {
+	var (
+		dr = toCustomData(data, data_protobuf.ToProtobufDataRaw)
+		sr = vtprotobuf.SerializersRaw
+	)
+	for i := range sr {
+		benchser.BenchmarkSerializer(sr[i], wantFeatures, dr, b)
 	}
 	runtime.GC()
-
-	for i := range protobuf_mus.SerializersNative {
-		benchser.BenchmarkSerializer(protobuf_mus.SerializersNative[i],
-			wantFeatures, protobufDataRaw, b)
-	}
-	runtime.GC()
-
-	protobufDataRawVarint := toCustomData(data, vtprotobuf.ToProtobufDataRawVarint)
-	for i := range vtprotobuf.SerializersVarint {
-		benchser.BenchmarkSerializer(vtprotobuf.SerializersVarint[i], wantFeatures,
-			protobufDataRawVarint, b)
+	var (
+		dv = toCustomData(data, data_protobuf.ToProtobufDataVarint)
+		sv = vtprotobuf.SerializersVarint
+	)
+	for i := range sv {
+		benchser.BenchmarkSerializer(sv[i], wantFeatures, dv, b)
 	}
 	runtime.GC()
 }
 
-func benchmarkBebop200sc(wantFeatures []serializer.Feature,
+func benchmarkProtobufMUS(wantFeatures []benchser.Feature,
 	data []general.Data, b *testing.B) {
-	bebop200scData := toCustomData(data, bebop200sc.ToBebop200scData)
-	for i := range bebop200sc.Serializers {
-		benchser.BenchmarkSerializer(bebop200sc.Serializers[i], wantFeatures,
-			bebop200scData, b)
+	var (
+		d = toCustomData(data, data_protobuf_mus.ToProtobufMUSData)
+		s = protobuf_mus.Serializers
+	)
+	for i := range s {
+		benchser.BenchmarkSerializer(s[i], wantFeatures, d, b)
+	}
+	runtime.GC()
+	var (
+		pd = toCustomData(data, data_protobuf.ToProtobufDataRaw)
+		ns = protobuf_mus.SerializersNative
+	)
+	for i := range ns {
+		benchser.BenchmarkSerializer(ns[i], wantFeatures, pd, b)
+	}
+	runtime.GC()
+}
+
+func benchmarkBebop200sc(wantFeatures []benchser.Feature, data []general.Data,
+	b *testing.B) {
+	var (
+		d = toCustomData(data, data_bebop.ToBebop200scData)
+		s = bebop200sc.Serializers
+	)
+	for i := range s {
+		benchser.BenchmarkSerializer(s[i], wantFeatures, d, b)
 	}
 	runtime.GC()
 }

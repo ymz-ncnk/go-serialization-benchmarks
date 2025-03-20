@@ -1,8 +1,14 @@
 package json
 
 import (
+	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
-var Serializers = []serializer.Serializer[general.Data]{Serializer{}}
+var GeneralFeatures = []benchser.Feature{
+	benchser.Reflect,
+	benchser.Text,
+	benchser.Int,
+}
+
+var Serializers = []benchser.Serializer[general.Data]{Serializer{}}

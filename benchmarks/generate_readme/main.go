@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	md "github.com/nao1215/markdown"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
 )
 
 const ReadmeFileName = "README.md"
@@ -110,8 +110,8 @@ func AddBenchmarksSectionToReadme(readmeFile *os.File, table BenchmarksTable) {
 func AddFastestSafeSubsectionToReadme(readmeFile *os.File, table BenchmarksTable) (
 	err error) {
 	filter := func(item SerializerItem) bool {
-		if strings.Contains(item.Name, string(serializer.Unsafe)) {
-			return !strings.Contains(item.Name, string(serializer.NotUnsafe))
+		if strings.Contains(item.Name, string(benchser.Unsafe)) {
+			return !strings.Contains(item.Name, string(benchser.NotUnsafe))
 		}
 		return false
 	}
@@ -122,8 +122,8 @@ func AddFastestSafeSubsectionToReadme(readmeFile *os.File, table BenchmarksTable
 func AddFastestUnsafeSubsectionToReadme(readmeFile *os.File,
 	table BenchmarksTable) (err error) {
 	filter := func(item SerializerItem) bool {
-		if strings.Contains(item.Name, string(serializer.Unsafe)) {
-			return strings.Contains(item.Name, string(serializer.NotUnsafe))
+		if strings.Contains(item.Name, string(benchser.Unsafe)) {
+			return strings.Contains(item.Name, string(benchser.NotUnsafe))
 		}
 		return true
 	}
@@ -175,7 +175,7 @@ func addFastestSubsectionToReadme(readmeFile *os.File, sectionName string,
 		if filter(item) {
 			continue
 		}
-		serializerName, err = serializer.ResultName(item.Name).SerializerName()
+		serializerName, err = benchser.ResultName(item.Name).SerializerName()
 		if err != nil {
 			return
 		}
@@ -188,7 +188,7 @@ func addFastestSubsectionToReadme(readmeFile *os.File, sectionName string,
 	var name string
 	for i := 0; i < len(fastestsTable); i++ {
 		item = fastestsTable[i]
-		name, _ = serializer.ResultName(item.Name).SerializerName()
+		name, _ = benchser.ResultName(item.Name).SerializerName()
 		tableSet.Rows = append(tableSet.Rows, []string{
 			name,
 			fmt.Sprintf("%v", item.IterationsCount),

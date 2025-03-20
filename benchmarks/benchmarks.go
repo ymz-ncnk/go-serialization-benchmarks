@@ -6,18 +6,17 @@ import (
 	"strings"
 
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benc"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/gob"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/json"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/mus"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf_mus"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/vtprotobuf"
 )
 
-func AllSerializers() (serializers []serializer.SerializerDesc, err error) {
-	serializers = []serializer.SerializerDesc{}
+func AllSerializers() (serializers []benchser.SerializerDesc, err error) {
+	serializers = []benchser.SerializerDesc{}
 
 	// json
 	if len(json.Serializers) == 0 {
@@ -82,17 +81,16 @@ func AllSerializers() (serializers []serializer.SerializerDesc, err error) {
 }
 
 func GeneralDataSerializers() (
-	serializers []serializer.Serializer[general.Data]) {
-	serializers = []serializer.Serializer[general.Data]{}
+	serializers []benchser.Serializer[general.Data]) {
+	serializers = []benchser.Serializer[general.Data]{}
 	serializers = append(serializers, json.Serializers...)
 	serializers = append(serializers, gob.Serializers...)
 	serializers = append(serializers, mus.Serializers...)
 	serializers = append(serializers, benc.Serializers...)
-	serializers = append(serializers, protobuf_mus.Serializers...)
 	return
 }
 
-func parseFeatures() (features []serializer.Feature, err error) {
+func parseFeatures() (features []benchser.Feature, err error) {
 	var (
 		fs = flag.NewFlagSet("my", flag.ContinueOnError)
 		f  = fs.String("f", "", "a list of features, separeted by ','")
@@ -107,9 +105,9 @@ func parseFeatures() (features []serializer.Feature, err error) {
 		strs = strings.Split(*f, ",")
 		l    = len(strs)
 	)
-	features = make([]serializer.Feature, l)
+	features = make([]benchser.Feature, l)
 	for i := range l {
-		features[i] = serializer.Feature(strs[i])
+		features[i] = benchser.Feature(strs[i])
 	}
 	return
 }

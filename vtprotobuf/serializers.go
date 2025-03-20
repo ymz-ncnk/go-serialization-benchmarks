@@ -1,45 +1,28 @@
 package vtprotobuf
 
 import (
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
 	data_proto "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 const VTProtobuf = "vtprotobuf"
 
+var GeneralFeatures = []benchser.Feature{
+	benchser.Binary,
+	benchser.Codegen,
+}
+
 var (
-	SerializersRaw = []serializer.Serializer[*data_proto.DataRaw]{
+	SerializersRaw = []benchser.Serializer[*data_proto.DataRaw]{
 		VTSerializerRaw{},
-		VTSerializerRawReuse{bs: make([]byte, serializer.BufSize)},
+		VTSerializerRawReuse{bs: make([]byte, benchser.BufSize)},
 		VTSerializerRawUnsafeUnm{},
-		VTSerializerRawUnsafeUnmReuse{bs: make([]byte, serializer.BufSize)},
+		VTSerializerRawUnsafeUnmReuse{bs: make([]byte, benchser.BufSize)},
 	}
-	SerializersVarint = []serializer.Serializer[*data_proto.DataRawVarint]{
+	SerializersVarint = []benchser.Serializer[*data_proto.DataRawVarint]{
 		VTSerializerVarint{},
-		VTSerializerVarintReuse{bs: make([]byte, serializer.BufSize)},
+		VTSerializerVarintReuse{bs: make([]byte, benchser.BufSize)},
 		VTSerializerVarintUnsafeUnm{},
-		VTSerializerVarintUnsafeUnmReuse{bs: make([]byte, serializer.BufSize)},
+		VTSerializerVarintUnsafeUnmReuse{bs: make([]byte, benchser.BufSize)},
 	}
 )
-
-func ToProtobufDataRaw(data general.Data) (d *data_proto.DataRaw) {
-	return &data_proto.DataRaw{
-		Str:     data.Str,
-		Bool:    data.Bool,
-		Int32:   data.Int32,
-		Float64: data.Float64,
-		Time:    timestamppb.New(data.Time),
-	}
-}
-
-func ToProtobufDataRawVarint(data general.Data) (d *data_proto.DataRawVarint) {
-	return &data_proto.DataRawVarint{
-		Str:     data.Str,
-		Bool:    data.Bool,
-		Int32:   data.Int32,
-		Float64: data.Float64,
-		Time:    timestamppb.New(data.Time),
-	}
-}

@@ -1,13 +1,18 @@
 package protobuf_mus
 
 import (
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
 	data_proto "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
+	data_protobuf_mus "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf_mus"
 	"google.golang.org/protobuf/encoding/protowire"
 )
 
 const Protobuf = "protobuf_mus"
+
+var GeneralFeatures = []benchser.Feature{
+	benchser.Binary,
+	benchser.Manual,
+}
 
 var (
 	strFieldTag     = protowire.EncodeTag(1, protowire.BytesType)
@@ -17,15 +22,15 @@ var (
 	timeFieldTag    = protowire.EncodeTag(5, protowire.BytesType)
 )
 
-var Serializers = []serializer.Serializer[general.Data]{
-	SerializerMUSVarint{},
-	SerializerMUSVarintReuse{bs: make([]byte, serializer.BufSize)},
-	SerializerMUSRaw{},
-	SerializerMUSRawReuse{bs: make([]byte, serializer.BufSize)},
-	SerializerMUSUnsafe{},
-	SerializerMUSUnsafeReuse{bs: make([]byte, serializer.BufSize)},
+var Serializers = []benchser.Serializer[data_protobuf_mus.Data]{
+	SerializerVarint{},
+	SerializerVarintReuse{bs: make([]byte, benchser.BufSize)},
+	SerializerRaw{},
+	SerializerRawReuse{bs: make([]byte, benchser.BufSize)},
+	SerializerUnsafe{},
+	SerializerUnsafeReuse{bs: make([]byte, benchser.BufSize)},
 }
 
-var SerializersNative = []serializer.Serializer[*data_proto.DataRaw]{
-	SerializerNativeUnsafeReuse{bs: make([]byte, serializer.BufSize)},
+var SerializersNative = []benchser.Serializer[*data_proto.DataRaw]{
+	SerializerNativeUnsafeReuse{bs: make([]byte, benchser.BufSize)},
 }

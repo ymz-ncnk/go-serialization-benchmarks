@@ -6,15 +6,14 @@ import (
 
 	"github.com/brianvoe/gofakeit"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/serializer"
 )
 
 type Data[T any] interface {
 	EqualTo(T) error
 }
 
-func BenchmarkSerializer[T Data[T]](s serializer.Serializer[T],
-	wantFeatures []serializer.Feature,
+func BenchmarkSerializer[T Data[T]](s Serializer[T],
+	wantFeatures []Feature,
 	data []T,
 	b *testing.B,
 ) {
@@ -33,7 +32,7 @@ func BenchmarkSerializer[T Data[T]](s serializer.Serializer[T],
 	}
 }
 
-func ReportBSizeMetric[T any](s serializer.Serializer[T], d []T, b *testing.B) {
+func ReportBSizeMetric[T any](s Serializer[T], d []T, b *testing.B) {
 	var (
 		err      error
 		bs       []byte
@@ -63,7 +62,7 @@ func GenerateData(count int) (d []general.Data, err error) {
 	return
 }
 
-func doMarshalUnmarshalCheck[T Data[T]](s serializer.Serializer[T], d []T,
+func doMarshalUnmarshalCheck[T Data[T]](s Serializer[T], d []T,
 	b *testing.B) {
 	var (
 		err  error
@@ -85,7 +84,7 @@ func doMarshalUnmarshalCheck[T Data[T]](s serializer.Serializer[T], d []T,
 	}
 }
 
-func hasFeatures(s serializer.SerializerDesc, features []serializer.Feature) bool {
+func hasFeatures(s SerializerDesc, features []Feature) bool {
 	for i := range features {
 		if !slices.Contains(s.Features(), features[i]) {
 			return false
