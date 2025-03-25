@@ -42,12 +42,10 @@ From the `benchmarks/` folder:
 ```bash
 go test -bench=.
 ```
-We can also filter the serializers by features, for example:
+To filter serializers - for example, by `binary` and `manual` types:
 ```bash
 go test -bench=. -- -f binary,manual
 ```
-In this case we will see the results of serializers that have both `binary`
-and `manual` features.
 To run benchmarks for one particular case just name it, for example:
 ```bash
 go test -bench=BenchmarkSerializers/mus
