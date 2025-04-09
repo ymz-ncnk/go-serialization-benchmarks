@@ -3,6 +3,7 @@ package protobuf_mus
 import (
 	"fmt"
 
+	ext "github.com/mus-format/ext-protobuf-go"
 	"github.com/mus-format/mus-go/unsafe"
 	"github.com/mus-format/mus-go/varint"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
@@ -18,7 +19,7 @@ func (s SerializerNativeUnsafeReuse) Marshal(data *data_proto.DataRaw) (bs []byt
 	var n int
 	if data.Str != "" {
 		n += varint.Uint64.Marshal(strFieldTag, s.bs[n:])
-		n += unsafe.String.Marshal(data.Str, s.bs[n:])
+		n += ext.StringUnsafe.Marshal(data.Str, s.bs[n:])
 	}
 	if data.Bool {
 		n += varint.Uint64.Marshal(boolFieldTag, s.bs[n:])
@@ -34,7 +35,7 @@ func (s SerializerNativeUnsafeReuse) Marshal(data *data_proto.DataRaw) (bs []byt
 	}
 	if data.Time != nil {
 		n += varint.Uint64.Marshal(timeFieldTag, s.bs[n:])
-		n += TimestampNativeProtobuf.Marshal(data.Time, s.bs[n:])
+		n += ext.TimestampNativeProtobuf.Marshal(data.Time, s.bs[n:])
 	}
 	bs = s.bs[:n]
 	return
@@ -56,7 +57,7 @@ func (s SerializerNativeUnsafeReuse) Unmarshal(bs []byte) (
 		}
 		switch tag {
 		case strFieldTag:
-			data.Str, n1, err = unsafe.String.Unmarshal(bs[n:])
+			data.Str, n1, err = ext.StringUnsafe.Unmarshal(bs[n:])
 		case boolFieldTag:
 			data.Bool, n1, err = unsafe.Bool.Unmarshal(bs[n:])
 		case int32FieldTag:
@@ -64,7 +65,7 @@ func (s SerializerNativeUnsafeReuse) Unmarshal(bs []byte) (
 		case float64FieldTag:
 			data.Float64, n1, err = unsafe.Float64.Unmarshal(bs[n:])
 		case timeFieldTag:
-			data.Time, n1, err = TimestampNativeProtobuf.Unmarshal(bs[n:])
+			data.Time, n1, err = ext.TimestampNativeProtobuf.Unmarshal(bs[n:])
 		default:
 			err = fmt.Errorf("unexpected tag %v", tag)
 		}

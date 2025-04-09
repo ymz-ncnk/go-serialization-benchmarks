@@ -3,6 +3,7 @@ package protobuf_mus
 import (
 	"fmt"
 
+	ext "github.com/mus-format/ext-protobuf-go"
 	"github.com/mus-format/mus-go/ord"
 	"github.com/mus-format/mus-go/raw"
 	"github.com/mus-format/mus-go/varint"
@@ -16,7 +17,7 @@ func (s SerializerRaw) Marshal(data data_protobuf_mus.Data) (bs []byte, err erro
 	var n int
 	if data.Str != "" {
 		n += varint.Uint64.Size(strFieldTag)
-		n += ord.String.Size(data.Str)
+		n += ext.String.Size(data.Str)
 	}
 	if data.Bool {
 		n += varint.Uint64.Size(boolFieldTag)
@@ -32,7 +33,7 @@ func (s SerializerRaw) Marshal(data data_protobuf_mus.Data) (bs []byte, err erro
 	}
 	if data.Time.Seconds != 0 || data.Time.Nanos != 0 {
 		n += varint.Uint64.Size(timeFieldTag)
-		n += TimestampProtobuf.Size(data.Time)
+		n += ext.TimestampProtobuf.Size(data.Time)
 	}
 
 	bs = make([]byte, n)
@@ -40,7 +41,7 @@ func (s SerializerRaw) Marshal(data data_protobuf_mus.Data) (bs []byte, err erro
 
 	if data.Str != "" {
 		n += varint.Uint64.Marshal(strFieldTag, bs[n:])
-		n += ord.String.Marshal(data.Str, bs[n:])
+		n += ext.String.Marshal(data.Str, bs[n:])
 	}
 	if data.Bool {
 		n += varint.Uint64.Marshal(boolFieldTag, bs[n:])
@@ -56,7 +57,7 @@ func (s SerializerRaw) Marshal(data data_protobuf_mus.Data) (bs []byte, err erro
 	}
 	if data.Time.Seconds != 0 || data.Time.Nanos != 0 {
 		n += varint.Uint64.Marshal(timeFieldTag, bs[n:])
-		n += TimestampProtobuf.Marshal(data.Time, bs[n:])
+		n += ext.TimestampProtobuf.Marshal(data.Time, bs[n:])
 	}
 	return
 }
@@ -75,7 +76,7 @@ func (s SerializerRaw) Unmarshal(bs []byte) (data data_protobuf_mus.Data, err er
 		}
 		switch tag {
 		case strFieldTag:
-			data.Str, n1, err = ord.String.Unmarshal(bs[n:])
+			data.Str, n1, err = ext.String.Unmarshal(bs[n:])
 		case boolFieldTag:
 			data.Bool, n1, err = ord.Bool.Unmarshal(bs[n:])
 		case int32FieldTag:
@@ -83,7 +84,7 @@ func (s SerializerRaw) Unmarshal(bs []byte) (data data_protobuf_mus.Data, err er
 		case float64FieldTag:
 			data.Float64, n1, err = raw.Float64.Unmarshal(bs[n:])
 		case timeFieldTag:
-			data.Time, n1, err = TimestampProtobuf.Unmarshal(bs[n:])
+			data.Time, n1, err = ext.TimestampProtobuf.Unmarshal(bs[n:])
 		default:
 			err = fmt.Errorf("unexpected tag %v", tag)
 		}

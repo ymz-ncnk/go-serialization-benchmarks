@@ -3,6 +3,7 @@ package general
 import (
 	"fmt"
 
+	"github.com/mus-format/ext-protobuf-go"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
 )
 
@@ -31,7 +32,7 @@ func ToProtobufMUSData(data general.Data) (d Data) {
 		Bool:    data.Bool,
 		Int32:   data.Int32,
 		Float64: data.Float64,
-		Time: Timestamp{Seconds: data.Time.Unix(),
+		Time: ext.Timestamp{Seconds: data.Time.Unix(),
 			Nanos: int32(data.Time.Nanosecond())},
 	}
 }
