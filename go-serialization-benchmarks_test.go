@@ -35,10 +35,10 @@ func BenchmarkSerializers(b *testing.B) {
 		b.Fatal(err)
 	}
 	benchmarkGeneralDataSerializers(wantFeatures, data, b)
-	// benchmarkProtobuf(wantFeatures, data, b)
-	// benchmarkProtobufMUS(wantFeatures, data, b)
-	// benchmarkVTProtobuf(wantFeatures, data, b)
-	// benchmarkBebop200sc(wantFeatures, data, b)
+	benchmarkProtobuf(wantFeatures, data, b)
+	benchmarkProtobufMUS(wantFeatures, data, b)
+	benchmarkVTProtobuf(wantFeatures, data, b)
+	benchmarkBebop200sc(wantFeatures, data, b)
 }
 
 func benchmarkGeneralDataSerializers(wantFeatures []benchser.Feature,
