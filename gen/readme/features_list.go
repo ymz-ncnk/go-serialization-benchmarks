@@ -1,19 +1,53 @@
-package benchmarks
+package main
 
 import (
 	"errors"
-	"flag"
 	"strings"
 
-	"github.com/ymz-ncnk/go-serialization-benchmarks/benc"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/gob"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/json"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/mus"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/protobuf"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/vtprotobuf"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/projects/benc"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/projects/gob"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/projects/json"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/projects/mus"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/projects/protobuf"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/projects/vtprotobuf"
 )
+
+func MakeFeaturesList() (featuresList []string, err error) {
+	type FeatureMap map[string]string
+	m := map[string]FeatureMap{}
+	d, err := AllSerializers()
+	if err != nil {
+		return
+	}
+	for i := range d {
+		var name string
+		name, err = d[i].Name().SerializerName()
+		if err != nil {
+			return
+		}
+		if _, pst := m[name]; !pst {
+			m[name] = make(FeatureMap)
+		}
+		for j := range d[i].Features() {
+			f := d[i].Features()
+			m[name][string(f[j])] = ""
+		}
+	}
+
+	for serName, features := range m {
+		var (
+			slist = serName + ": "
+			arr   = []string{}
+		)
+		for f := range features {
+			arr = append(arr, f)
+		}
+		slist += strings.Join(arr, ",")
+		featuresList = append(featuresList, slist)
+	}
+	return
+}
 
 func AllSerializers() (serializers []benchser.SerializerDesc, err error) {
 	serializers = []benchser.SerializerDesc{}
@@ -76,38 +110,6 @@ func AllSerializers() (serializers []benchser.SerializerDesc, err error) {
 	}
 	for i := range vtprotobuf.SerializersVarint {
 		serializers = append(serializers, vtprotobuf.SerializersVarint[i])
-	}
-	return
-}
-
-func GeneralDataSerializers() (
-	serializers []benchser.Serializer[general.Data]) {
-	serializers = []benchser.Serializer[general.Data]{}
-	serializers = append(serializers, json.Serializers...)
-	serializers = append(serializers, gob.Serializers...)
-	serializers = append(serializers, mus.Serializers...)
-	serializers = append(serializers, benc.Serializers...)
-	return
-}
-
-func parseFeatures() (features []benchser.Feature, err error) {
-	var (
-		fs = flag.NewFlagSet("my", flag.ContinueOnError)
-		f  = fs.String("f", "", "a list of features, separeted by ','")
-	)
-	if err = fs.Parse(flag.Args()); err != nil {
-		return
-	}
-	if len(*f) < 1 {
-		return
-	}
-	var (
-		strs = strings.Split(*f, ",")
-		l    = len(strs)
-	)
-	features = make([]benchser.Feature, l)
-	for i := range l {
-		features[i] = benchser.Feature(strs[i])
 	}
 	return
 }

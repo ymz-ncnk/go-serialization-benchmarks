@@ -14,8 +14,8 @@ import (
 const ReadmeFileName = "README.md"
 
 const (
-	IntroductionFileName = "introduction.md"
-	TailFileName         = "tail.md"
+	IntroductionFileName = "./gen/readme/introduction.md"
+	TailFileName         = "./gen/readme/tail.md"
 )
 
 const (
@@ -39,8 +39,6 @@ const ResultsExplanations = ", where `iterations count`, `ns/op`, `B/op`, `alloc
 	"`go test -bench=.` output and `B/size` - determines how many bytes were used on \n" +
 	"average by the serializer to encode `Data`."
 
-//go:generate go run ./...
-
 func main() {
 	out, err := RunBenchmarks()
 	if err != nil {
@@ -58,7 +56,7 @@ func main() {
 	}
 	defer introduction.Close()
 
-	dst, err := os.Create("../../" + ReadmeFileName)
+	dst, err := os.Create(ReadmeFileName)
 	if err != nil {
 		panic(err)
 	}
@@ -97,8 +95,9 @@ func main() {
 
 func RunBenchmarks() (out []byte, err error) {
 	cmd := exec.Command("go", "test", "-bench=BenchmarkSerializers")
-	cmd.Dir = "../"
-	return cmd.Output()
+	// cmd.Dir = "../"
+	out, err = cmd.CombinedOutput()
+	return
 }
 
 func AddBenchmarksSectionToReadme(readmeFile *os.File, table BenchmarksTable) {

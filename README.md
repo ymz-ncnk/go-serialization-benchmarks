@@ -72,37 +72,33 @@ In this benchmarks:
 average by the serializer to encode `Data`.  
   
 # Features
-- protobuf: codegen,raw,varint,binary
-- vtprotobuf: unsafeunm,varint,binary,codegen,raw,reuse
 - json: reflect,text,int
 - gob: binary,int
-- mus: binary,codegen,unsafestr,reuse,varint,unsafe,notunsafe,manual,raw
-- benc: raw,reuse,unsafestr,binary,codegen,manual
+- mus: manual,unsafestr,raw,reuse,notunsafe,binary,codegen,varint,unsafe
+- benc: binary,codegen,manual,raw,reuse,unsafestr
+- protobuf: binary,codegen,raw,varint
+- vtprotobuf: raw,reuse,unsafeunm,varint,binary,codegen
   
 # List of Features
-Each feature describes a serializer:
-- `reflect` - it uses reflection.
-- `codegen` - it uses code generation.
-- `manual` - there are only serialization primitives, so you have to use them 
-  manually.
-- `text` - it has text serialization format.
-- `binary` -  it has binary serialization format.
-- `varint` - it supports varint encoding.
-- `raw` - it supports raw encoding.
-- `int` - it supports `int` type.
-- `native` - when a format is implemented with a set of primitives and native 
-  data is used.
+Each feature describes a property of a serializer:
+- `reflect` – uses reflection.
+- `codegen` – uses code generation.
+- `manual` – only provides serialization primitives, requiring manual usage.
+- `text` – uses a text-based serialization format.
+- `binary` – uses a binary serialization format.
+- `varint` – supports varint encoding.
+- `raw` – supports raw encoding.
+- `int` – supports the int type.
+- `native` – uses native data structures.
 
-Features that must be in the result name when used:
-- `reuse` -  it supports buffer reuse.
-- `unsafe` - it supports unsafe code.
-- `unsafestr` - it supports only unsafe string serialization.
-- `unsafeunm` - it supports only unsafe unmarshalling.
-- `notunsafe` - it uses the unsafe code for all types except `string` and copies
-  data on unmarshal.
-- `fixbuf` - if a fixed buffer is used.
-
-This list can be expanded.
+Features that must appear in the result name when used:
+- `reuse` – supports buffer reuse.
+- `unsafe` – uses unsafe code.
+- `unsafestr` – uses unsafe code only for string serialization.
+- `unsafeunm` – uses unsafe code only for unmarshalling.
+- `notunsafe` – uses unsafe code for all types except string, and copies data 
+during unmarshalling.
+- `fixbuf` - uses a fixed buffer.
 
 # Data
 Randomly generated data has the following form:
@@ -118,7 +114,6 @@ type Data struct {
 It does not have an `int` type because many serializers do not support it.
 
 # Run Benchmarks
-From the `benchmarks/` folder:
 ```bash
 go test -bench=.
 ```
@@ -130,16 +125,14 @@ To run benchmarks for one particular case just name it, for example:
 ```bash
 go test -bench=BenchmarkSerializers/mus
 ```
-or
+Or to see the results obtained using the `reuse` feature:
 ```bash
 go test -bench=/.+reuse
 ```
-to see the results obtained using the `reuse` feature.
 
 # Generate README.md
-From the `benchmarks/` folder:
 ```bash
-go generate ./...
+go generate
 ```
 
 ## Recomendation
