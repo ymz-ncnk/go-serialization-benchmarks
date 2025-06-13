@@ -14,7 +14,7 @@ Benchmark results are available in [results/benchmarks.txt](results/benchmarks.t
 and the corresponding `benchstat` output can be found in [results/benchstat.txt](results/benchstat.txt).
   
 ## Fastest Safe
-|     NAME     |  SEC/OP  | B/SIZE |  B/OP   | ALLOCS/OP |
+|     NAME     |  NS/OP   | B/SIZE |  B/OP   | ALLOCS/OP |
 |--------------|----------|--------|---------|-----------|
 | mus          |   102.90 |  58.00 |   48.00 |         1 |
 | bebop200sc   |   108.80 |  61.00 |   48.00 |         1 |
@@ -26,14 +26,14 @@ and the corresponding `benchstat` output can be found in [results/benchstat.txt]
 | gob          | 17050.00 | 159.00 | 9493.50 |       195 |
 
 ## Fastest Unsafe
-|     NAME     | SEC/OP | B/SIZE |  B/OP  | ALLOCS/OP |
+|     NAME     | NS/OP  | B/SIZE |  B/OP  | ALLOCS/OP |
 |--------------|--------|--------|--------|-----------|
 | mus          |  77.21 |  58.00 |   0.00 |         0 |
 | benc         |  85.29 |  58.00 |   0.00 |         0 |
 | protobuf_mus | 136.40 |  69.00 |   0.00 |         0 |
 | vtprotobuf   | 161.40 |  69.00 | 144.00 |         2 |
 
-, where `sec/op`, `B/op`, `allocs/op` are standard `benchstat` output and 
+, where `ns/op`, `B/op`, `allocs/op` are standard `go test -bench=.` output and 
 `B/size` - determines how many bytes were used on average by the serializer to 
 encode data.
   

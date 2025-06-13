@@ -91,7 +91,7 @@ func (g *ReadmeGenerator) appendTemplate(md *markdown.Markdown, path string) err
 // appendBenchmarkTable creates a markdown table from a BenchmarkTable.
 func (g *ReadmeGenerator) appendBenchmarkTable(md *markdown.Markdown, tableData BenchmarkTable) {
 	// Define table headers
-	headers := []string{"Name", "sec/Op", "B/Size", "B/Op", "allocs/Op"}
+	headers := []string{"name", "ns/op", "B/size", "B/op", "allocs/op"}
 	table := markdown.TableSet{
 		Header: headers,
 		Rows:   [][]string{},
