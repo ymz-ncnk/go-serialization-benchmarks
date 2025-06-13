@@ -8,12 +8,11 @@ import (
 	"github.com/mus-format/mus-go/raw"
 	"github.com/mus-format/mus-go/varint"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	data_protobuf_mus "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf_mus"
 )
 
 type SerializerRaw struct{}
 
-func (s SerializerRaw) Marshal(data data_protobuf_mus.Data) (bs []byte, err error) {
+func (s SerializerRaw) Marshal(data Data) (bs []byte, err error) {
 	var n int
 	if data.Str != "" {
 		n += varint.Uint64.Size(strFieldTag)
@@ -62,7 +61,7 @@ func (s SerializerRaw) Marshal(data data_protobuf_mus.Data) (bs []byte, err erro
 	return
 }
 
-func (s SerializerRaw) Unmarshal(bs []byte) (data data_protobuf_mus.Data, err error) {
+func (s SerializerRaw) Unmarshal(bs []byte) (data Data, err error) {
 	var (
 		n, n1 int
 		l     = len(bs)

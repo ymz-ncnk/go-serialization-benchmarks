@@ -9,12 +9,11 @@ import (
 	"github.com/mus-format/mus-go/varint"
 
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	data_protobuf_mus "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf_mus"
 )
 
 type SerializerVarint struct{}
 
-func (s SerializerVarint) Marshal(data data_protobuf_mus.Data) (bs []byte,
+func (s SerializerVarint) Marshal(data Data) (bs []byte,
 	err error) {
 	var n int
 	if data.Str != "" {
@@ -64,7 +63,7 @@ func (s SerializerVarint) Marshal(data data_protobuf_mus.Data) (bs []byte,
 	return
 }
 
-func (s SerializerVarint) Unmarshal(bs []byte) (data data_protobuf_mus.Data,
+func (s SerializerVarint) Unmarshal(bs []byte) (data Data,
 	err error) {
 	var (
 		n, n1 int
@@ -108,5 +107,5 @@ func (s SerializerVarint) Features() []benchser.Feature {
 }
 
 func (s SerializerVarint) features() []benchser.Feature {
-	return []benchser.Feature{benchser.Reuse}
+	return []benchser.Feature{benchser.Varint}
 }

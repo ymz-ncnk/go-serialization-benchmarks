@@ -4,12 +4,12 @@ import (
 	"github.com/mus-format/mus-go/ord"
 	"github.com/mus-format/mus-go/raw"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 )
 
 type SerializerRaw struct{}
 
-func (s SerializerRaw) Marshal(data general.Data) (bs []byte, err error) {
+func (s SerializerRaw) Marshal(data common.Data) (bs []byte, err error) {
 	n := ord.String.Size(data.Str)
 	n += ord.Bool.Size(data.Bool)
 	n += raw.Int32.Size(data.Int32)
@@ -24,7 +24,7 @@ func (s SerializerRaw) Marshal(data general.Data) (bs []byte, err error) {
 	return
 }
 
-func (s SerializerRaw) Unmarshal(bs []byte) (data general.Data, err error) {
+func (s SerializerRaw) Unmarshal(bs []byte) (data common.Data, err error) {
 	var n, n1 int
 	data.Str, n, err = ord.String.Unmarshal(bs)
 	if err != nil {

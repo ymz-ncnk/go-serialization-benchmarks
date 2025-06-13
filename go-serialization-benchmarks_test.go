@@ -8,10 +8,8 @@ import (
 	"testing"
 
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	data_bebop "github.com/ymz-ncnk/go-serialization-benchmarks/data/bebop"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 	data_protobuf "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf"
-	data_protobuf_mus "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf_mus"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/projects/benc"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/projects/gob"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/projects/json"
@@ -30,27 +28,27 @@ func BenchmarkSerializers(b *testing.B) {
 	if err != nil {
 		b.Fatal(err)
 	}
-	data, err := benchser.GenerateData(DataCount)
+	data, err := benchser.CommonData(DataCount)
 	if err != nil {
 		b.Fatal(err)
 	}
-	benchmarkGeneralDataSerializers(wantFeatures, data, b)
+	benchmarkCommonDataSerializers(wantFeatures, data, b)
 	benchmarkProtobuf(wantFeatures, data, b)
 	benchmarkProtobufMUS(wantFeatures, data, b)
 	benchmarkVTProtobuf(wantFeatures, data, b)
 	benchmarkBebop200sc(wantFeatures, data, b)
 }
 
-func benchmarkGeneralDataSerializers(wantFeatures []benchser.Feature,
-	data []general.Data, b *testing.B) {
-	s := generalDataSerializers()
+func benchmarkCommonDataSerializers(wantFeatures []benchser.Feature,
+	data []common.Data, b *testing.B) {
+	s := commonDataSerializers()
 	for i := range s {
 		benchser.BenchmarkSerializer(s[i], wantFeatures, data, b)
 	}
 }
 
 func benchmarkProtobuf(wantFeatures []benchser.Feature,
-	data []general.Data, b *testing.B) {
+	data []common.Data, b *testing.B) {
 	var (
 		dr = toCustomData(data, data_protobuf.ToProtobufDataRaw)
 		sr = protobuf.SerializersRaw
@@ -69,7 +67,7 @@ func benchmarkProtobuf(wantFeatures []benchser.Feature,
 	runtime.GC()
 }
 
-func benchmarkVTProtobuf(wantFeatures []benchser.Feature, data []general.Data,
+func benchmarkVTProtobuf(wantFeatures []benchser.Feature, data []common.Data,
 	b *testing.B) {
 	var (
 		dr = toCustomData(data, data_protobuf.ToProtobufDataRaw)
@@ -90,9 +88,9 @@ func benchmarkVTProtobuf(wantFeatures []benchser.Feature, data []general.Data,
 }
 
 func benchmarkProtobufMUS(wantFeatures []benchser.Feature,
-	data []general.Data, b *testing.B) {
+	data []common.Data, b *testing.B) {
 	var (
-		d = toCustomData(data, data_protobuf_mus.ToProtobufMUSData)
+		d = toCustomData(data, protobuf_mus.ToProtobufMUSData)
 		s = protobuf_mus.Serializers
 	)
 	for i := range s {
@@ -109,10 +107,10 @@ func benchmarkProtobufMUS(wantFeatures []benchser.Feature,
 	runtime.GC()
 }
 
-func benchmarkBebop200sc(wantFeatures []benchser.Feature, data []general.Data,
+func benchmarkBebop200sc(wantFeatures []benchser.Feature, data []common.Data,
 	b *testing.B) {
 	var (
-		d = toCustomData(data, data_bebop.ToBebop200scData)
+		d = toCustomData(data, bebop200sc.ToBebop200scData)
 		s = bebop200sc.Serializers
 	)
 	for i := range s {
@@ -121,9 +119,9 @@ func benchmarkBebop200sc(wantFeatures []benchser.Feature, data []general.Data,
 	runtime.GC()
 }
 
-func generalDataSerializers() (
-	serializers []benchser.Serializer[general.Data]) {
-	serializers = []benchser.Serializer[general.Data]{}
+func commonDataSerializers() (
+	serializers []benchser.Serializer[common.Data]) {
+	serializers = []benchser.Serializer[common.Data]{}
 	serializers = append(serializers, json.Serializers...)
 	serializers = append(serializers, gob.Serializers...)
 	serializers = append(serializers, mus.Serializers...)
@@ -153,8 +151,8 @@ func parseFeatures() (features []benchser.Feature, err error) {
 	return
 }
 
-func toCustomData[T any](data []general.Data,
-	fn func(data general.Data) T) (d []T) {
+func toCustomData[T any](data []common.Data,
+	fn func(data common.Data) T) (d []T) {
 	l := len(data)
 	d = make([]T, l)
 	for i := range l {

@@ -5,23 +5,23 @@ import (
 	"encoding/gob"
 
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 )
 
 func NewSerializer() Serializer {
-	gob.Register(general.Data{})
+	gob.Register(common.Data{})
 	return Serializer{}
 }
 
 type Serializer struct{}
 
-func (s Serializer) Marshal(data general.Data) (bs []byte, err error) {
+func (s Serializer) Marshal(data common.Data) (bs []byte, err error) {
 	var buf bytes.Buffer
 	err = gob.NewEncoder(&buf).Encode(data)
 	return buf.Bytes(), err
 }
 
-func (s Serializer) Unmarshal(bs []byte) (data general.Data, err error) {
+func (s Serializer) Unmarshal(bs []byte) (data common.Data, err error) {
 	err = gob.NewDecoder(bytes.NewReader(bs)).Decode(&data)
 	return
 }

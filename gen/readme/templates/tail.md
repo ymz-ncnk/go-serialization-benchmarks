@@ -1,4 +1,3 @@
-
 # List of Features
 Each feature describes a property of a serializer:
 - `reflect` – uses reflection.
@@ -31,7 +30,6 @@ type Data struct {
   Time    time.Time
 }
 ```
-It does not have an `int` type because many serializers do not support it.
 
 # Run Benchmarks
 ```bash
@@ -45,7 +43,7 @@ To run benchmarks for one particular case just name it, for example:
 ```bash
 go test -bench=BenchmarkSerializers/mus
 ```
-Or to see the results obtained using the `reuse` feature:
+To see the results obtained using the `reuse` feature:
 ```bash
 go test -bench=/.+reuse
 ```
@@ -56,24 +54,19 @@ go generate
 ```
 
 ## Recomendation
-When creating `README.md` on a laptop, please make sure that it is connected to 
-a charger and the fan is running at full speed.
+When running benchmarks on a laptop, make sure that it is connected to a charger 
+and the fan is at full speed.
 
 # Contribution
 First of all, you need to create a new package for your serializer if it doesn't
 already exist. Then:
-1. Implement [serializer.Serializer\[serializer.Data\]](serializer/serializer.go) 
-   interface. Doing this you can use:
-   - [serializer.NewResultName(...)](serializer/result_name.go) - which creates 
-     a correct result name.
-   - [serializer.BufSize](serializer/serializer.go) - defines the recommended 
-     buffer size for reuse.
+1. Implement [benchser.Serializer](benchser/serializer.go) interface.
 2. If you use own `Data` make shure it implements `EqualTo(data Data) error` 
    method, also add `func ToYourData(data serializer.Data) (d Data)`
-   function (an example can be found in [bbebop200sc/serializers.go](bebop200sc/serializers.go)).
+   function (an example can be found in [projects/bbebop200sc/serializers.go](projects/bebop200sc/serializers.go)).
 3. Define
    ```go
-   var Serializers = []serializer.Serializer[serializer.Data]{Serializer{}}
+   var Serializers = []benchser.Serializer[...]{...}
    ```
    variable. Note that it can contain several serializers that produce different
    results.

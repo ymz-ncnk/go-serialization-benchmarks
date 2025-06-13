@@ -3,7 +3,7 @@ package protobuf
 import (
 	fmt "fmt"
 
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -46,7 +46,7 @@ func (d *DataRawVarint) EqualTo(ad *DataRawVarint) error {
 	return nil
 }
 
-func ToProtobufDataRaw(data general.Data) (d *DataRaw) {
+func ToProtobufDataRaw(data common.Data) (d *DataRaw) {
 	return &DataRaw{
 		Str:     data.Str,
 		Bool:    data.Bool,
@@ -56,7 +56,7 @@ func ToProtobufDataRaw(data general.Data) (d *DataRaw) {
 	}
 }
 
-func ToProtobufDataVarint(data general.Data) (d *DataRawVarint) {
+func ToProtobufDataVarint(data common.Data) (d *DataRawVarint) {
 	return &DataRawVarint{
 		Str:     data.Str,
 		Bool:    data.Bool,

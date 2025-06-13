@@ -22,7 +22,5 @@ var (
 	SerializersVarint = []benchser.Serializer[*data_proto.DataRawVarint]{
 		VTSerializerVarint{},
 		VTSerializerVarintReuse{bs: make([]byte, benchser.BufSize)},
-		VTSerializerVarintUnsafeUnm{},
-		VTSerializerVarintUnsafeUnmReuse{bs: make([]byte, benchser.BufSize)},
 	}
 )

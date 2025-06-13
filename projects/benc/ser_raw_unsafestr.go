@@ -5,12 +5,12 @@ import (
 
 	bstd "github.com/deneonet/benc/std"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 )
 
 type SerializerRawUnsafeStr struct{}
 
-func (s SerializerRawUnsafeStr) Marshal(data general.Data) (bs []byte,
+func (s SerializerRawUnsafeStr) Marshal(data common.Data) (bs []byte,
 	err error) {
 	size := bstd.SizeString(data.Str)
 	size += bstd.SizeBool()
@@ -27,7 +27,7 @@ func (s SerializerRawUnsafeStr) Marshal(data general.Data) (bs []byte,
 	return
 }
 
-func (s SerializerRawUnsafeStr) Unmarshal(bs []byte) (data general.Data,
+func (s SerializerRawUnsafeStr) Unmarshal(bs []byte) (data common.Data,
 	err error) {
 	var (
 		n   int

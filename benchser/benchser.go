@@ -5,18 +5,15 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 )
 
 type Data[T any] interface {
 	EqualTo(T) error
 }
 
-func BenchmarkSerializer[T Data[T]](s Serializer[T],
-	wantFeatures []Feature,
-	data []T,
-	b *testing.B,
-) {
+func BenchmarkSerializer[T Data[T]](s Serializer[T], wantFeatures []Feature,
+	data []T, b *testing.B) {
 	l := len(wantFeatures)
 	if l == 0 || (l > 0 && hasFeatures(s, wantFeatures)) {
 		b.Run(string(s.Name()), func(b *testing.B) {
@@ -48,10 +45,10 @@ func ReportBSizeMetric[T any](s Serializer[T], d []T, b *testing.B) {
 	b.ReportMetric(float64(dataSize/b.N), "B/size")
 }
 
-func GenerateData(count int) (d []general.Data, err error) {
-	d = make([]general.Data, count)
-	for i := range d {
-		d[i] = general.Data{
+func CommonData(count int) (data []common.Data, err error) {
+	data = make([]common.Data, count)
+	for i := range data {
+		data[i] = common.Data{
 			Str:     gofakeit.UUID(),
 			Bool:    gofakeit.Bool(),
 			Int32:   gofakeit.Int32(),

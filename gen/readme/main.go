@@ -1,217 +1,33 @@
 package main
 
 import (
-	"fmt"
-	"io"
+	"log"
 	"os"
-	"os/exec"
-	"strings"
-
-	md "github.com/nao1215/markdown"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
 )
 
-const ReadmeFileName = "README.md"
-
-const (
-	IntroductionFileName = "./gen/readme/introduction.md"
-	TailFileName         = "./gen/readme/tail.md"
-)
-
-const (
-	BenchmarksSectionName        = "Benchmarks"
-	FastestsSafeSubsectionName   = "Fastest Safe"
-	FastestsUnsafeSubsectionName = "Fastest Unsafe"
-	AllSubsectionName            = "All"
-	FeaturesTableName            = "Features"
-)
-
-const (
-	NameColumn            = "name"
-	IterationsCountColumn = "iterations count"
-	NsOpColumn            = "ns/op"
-	BSizeColumn           = "B/size"
-	BOpColumn             = "B/op"
-	AllocsOpColumn        = "allocs/op"
-)
-
-const ResultsExplanations = ", where `iterations count`, `ns/op`, `B/op`, `allocs/op` are standard \n" +
-	"`go test -bench=.` output and `B/size` - determines how many bytes were used on \n" +
-	"average by the serializer to encode `Data`."
-
+// This package contains AI generated code.
 func main() {
-	out, err := RunBenchmarks()
+	file, err := os.Open("results/benchstat.txt")
 	if err != nil {
 		panic(err)
 	}
-	table, err := ParseBenchmarksTable(out)
+	defer file.Close()
+
+	// 1. Parse the file content
+	rawData, err := Parse(file)
 	if err != nil {
-		panic(err)
+		log.Fatalf("Error parsing file: %v", err)
 	}
-	SortBenchmarksTable(table)
 
-	introduction, err := os.Open(IntroductionFileName)
+	// 2. Process the raw data
+	proc := NewProcessor()
+	safeTable, unsafeTable, err := proc.Process(rawData)
 	if err != nil {
-		panic(err)
-	}
-	defer introduction.Close()
-
-	dst, err := os.Create(ReadmeFileName)
-	if err != nil {
-		panic(err)
-	}
-	defer dst.Close()
-
-	_, err = io.Copy(dst, introduction)
-	if err != nil {
-		panic(err)
+		log.Fatalf("Error processing data: %v", err)
 	}
 
-	AddBenchmarksSectionToReadme(dst, table)
-	err = AddFastestSafeSubsectionToReadme(dst, table)
-	if err != nil {
-		panic(err)
+	generator := NewReadmeGenerator()
+	if err := generator.Generate(safeTable, unsafeTable); err != nil {
+		log.Fatalf("Failed to generate README: %v", err)
 	}
-	err = AddFastestUnsafeSubsectionToReadme(dst, table)
-	if err != nil {
-		panic(err)
-	}
-	AddAllSubsectionToReadme(dst, table)
-	err = AddFeaturesSectionToReadme(dst)
-	if err != nil {
-		panic(err)
-	}
-
-	tail, err := os.Open(TailFileName)
-	if err != nil {
-		panic(err)
-	}
-	defer tail.Close()
-	_, err = io.Copy(dst, tail)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func RunBenchmarks() (out []byte, err error) {
-	cmd := exec.Command("go", "test", "-bench=BenchmarkSerializers")
-	// cmd.Dir = "../"
-	out, err = cmd.CombinedOutput()
-	return
-}
-
-func AddBenchmarksSectionToReadme(readmeFile *os.File, table BenchmarksTable) {
-	md.NewMarkdown(readmeFile).LF().LF().
-		H1(BenchmarksSectionName).
-		Build()
-}
-
-func AddFastestSafeSubsectionToReadme(readmeFile *os.File, table BenchmarksTable) (
-	err error) {
-	filter := func(item SerializerItem) bool {
-		if strings.Contains(item.Name, string(benchser.Unsafe)) {
-			return !strings.Contains(item.Name, string(benchser.NotUnsafe))
-		}
-		return false
-	}
-	return addFastestSubsectionToReadme(readmeFile, FastestsSafeSubsectionName,
-		filter, table)
-}
-
-func AddFastestUnsafeSubsectionToReadme(readmeFile *os.File,
-	table BenchmarksTable) (err error) {
-	filter := func(item SerializerItem) bool {
-		if strings.Contains(item.Name, string(benchser.Unsafe)) {
-			return strings.Contains(item.Name, string(benchser.NotUnsafe))
-		}
-		return true
-	}
-	return addFastestSubsectionToReadme(readmeFile, FastestsUnsafeSubsectionName,
-		filter, table)
-}
-
-func AddAllSubsectionToReadme(readmeFile *os.File, table BenchmarksTable) {
-	tableSet := md.TableSet{
-		Header: []string{NameColumn, IterationsCountColumn, NsOpColumn,
-			BSizeColumn, BOpColumn, AllocsOpColumn},
-		Rows: [][]string{},
-	}
-	for i := 0; i < len(table); i++ {
-		item := table[i]
-		tableSet.Rows = append(tableSet.Rows, []string{
-			item.Name,
-			fmt.Sprintf("%v", item.IterationsCount),
-			fmt.Sprintf("%v", item.NsOp),
-			fmt.Sprintf("%v", item.BSize),
-			fmt.Sprintf("%v", item.BOp),
-			fmt.Sprintf("%v", item.AllocsOp),
-		})
-	}
-	md.NewMarkdown(readmeFile).LF().
-		H2(AllSubsectionName).
-		Table(tableSet).
-		PlainText(ResultsExplanations).
-		Build()
-}
-
-func addFastestSubsectionToReadme(readmeFile *os.File, sectionName string,
-	filter func(item SerializerItem) bool,
-	table BenchmarksTable,
-) (err error) {
-	tableSet := md.TableSet{
-		Header: []string{NameColumn, IterationsCountColumn, NsOpColumn,
-			BSizeColumn, BOpColumn, AllocsOpColumn},
-		Rows: [][]string{},
-	}
-	var (
-		fastests       = map[string]struct{}{}
-		fastestsTable  = []SerializerItem{}
-		item           SerializerItem
-		serializerName string
-	)
-	for i := 0; i < len(table); i++ {
-		item = table[i]
-		if filter(item) {
-			continue
-		}
-		serializerName, err = benchser.ResultName(item.Name).SerializerName()
-		if err != nil {
-			return
-		}
-		if _, pst := fastests[serializerName]; pst {
-			continue
-		}
-		fastestsTable = append(fastestsTable, item)
-		fastests[serializerName] = struct{}{}
-	}
-	var name string
-	for i := 0; i < len(fastestsTable); i++ {
-		item = fastestsTable[i]
-		name, _ = benchser.ResultName(item.Name).SerializerName()
-		tableSet.Rows = append(tableSet.Rows, []string{
-			name,
-			fmt.Sprintf("%v", item.IterationsCount),
-			fmt.Sprintf("%v", item.NsOp),
-			fmt.Sprintf("%v", item.BSize),
-			fmt.Sprintf("%v", item.BOp),
-			fmt.Sprintf("%v", item.AllocsOp),
-		})
-	}
-	md.NewMarkdown(readmeFile).LF().
-		H2(sectionName).
-		Table(tableSet).
-		Build()
-	return
-}
-
-func AddFeaturesSectionToReadme(readmeFile *os.File) (err error) {
-	featuresList, err := MakeFeaturesList()
-	if err != nil {
-		return
-	}
-	md.NewMarkdown(readmeFile).LF().LF().
-		H1(FeaturesTableName).
-		BulletList(featuresList...).LF().
-		Build()
-	return
 }

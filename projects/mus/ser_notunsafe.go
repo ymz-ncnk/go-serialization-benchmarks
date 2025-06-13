@@ -4,12 +4,12 @@ import (
 	"github.com/mus-format/mus-go/ord"
 	"github.com/mus-format/mus-go/unsafe"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 )
 
 type SerializerNotUnsafe struct{}
 
-func (s SerializerNotUnsafe) Marshal(data general.Data) (bs []byte, err error) {
+func (s SerializerNotUnsafe) Marshal(data common.Data) (bs []byte, err error) {
 	n := ord.String.Size(data.Str)
 	n += unsafe.Bool.Size(data.Bool)
 	n += unsafe.Int32.Size(data.Int32)
@@ -24,7 +24,7 @@ func (s SerializerNotUnsafe) Marshal(data general.Data) (bs []byte, err error) {
 	return
 }
 
-func (s SerializerNotUnsafe) Unmarshal(bs []byte) (data general.Data, err error) {
+func (s SerializerNotUnsafe) Unmarshal(bs []byte) (data common.Data, err error) {
 	var n, n1 int
 	data.Str, n, err = ord.String.Unmarshal(bs)
 	if err != nil {

@@ -1,8 +1,17 @@
-package general
+package common
 
 import (
 	"fmt"
+	"time"
 )
+
+type Data struct {
+	Str     string
+	Bool    bool
+	Int32   int32
+	Float64 float64
+	Time    time.Time
+}
 
 func (d Data) EqualTo(ad Data) (err error) {
 	if d.Str != ad.Str {

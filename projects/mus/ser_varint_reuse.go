@@ -5,14 +5,14 @@ import (
 	"github.com/mus-format/mus-go/raw"
 	"github.com/mus-format/mus-go/varint"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 )
 
 type SerializerRawVarintReuse struct {
 	bs []byte
 }
 
-func (s SerializerRawVarintReuse) Marshal(data general.Data) (bs []byte, err error) {
+func (s SerializerRawVarintReuse) Marshal(data common.Data) (bs []byte, err error) {
 	n := ord.String.Marshal(data.Str, s.bs)
 	n += ord.Bool.Marshal(data.Bool, s.bs[n:])
 	n += varint.Int32.Marshal(data.Int32, s.bs[n:])
@@ -22,7 +22,7 @@ func (s SerializerRawVarintReuse) Marshal(data general.Data) (bs []byte, err err
 	return
 }
 
-func (s SerializerRawVarintReuse) Unmarshal(bs []byte) (data general.Data, err error) {
+func (s SerializerRawVarintReuse) Unmarshal(bs []byte) (data common.Data, err error) {
 	var n, n1 int
 	data.Str, n, err = ord.String.Unmarshal(bs)
 	if err != nil {

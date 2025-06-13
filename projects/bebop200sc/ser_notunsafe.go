@@ -2,18 +2,17 @@ package bebop200sc
 
 import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	data "github.com/ymz-ncnk/go-serialization-benchmarks/data/bebop"
 )
 
 type SerializerNotUnsafe struct{}
 
-func (s SerializerNotUnsafe) Marshal(d data.Data) (bs []byte, err error) {
-	bs = d.MarshalBebop()
+func (s SerializerNotUnsafe) Marshal(data Data) (bs []byte, err error) {
+	bs = data.MarshalBebop()
 	return
 }
 
-func (s SerializerNotUnsafe) Unmarshal(bs []byte) (d data.Data, err error) {
-	err = d.UnmarshalBebop(bs)
+func (s SerializerNotUnsafe) Unmarshal(bs []byte) (data Data, err error) {
+	err = data.UnmarshalBebop(bs)
 	return
 }
 

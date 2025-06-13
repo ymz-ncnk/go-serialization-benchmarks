@@ -4,16 +4,16 @@ import (
 	"encoding/json"
 
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 )
 
 type Serializer struct{}
 
-func (s Serializer) Marshal(data general.Data) (bs []byte, err error) {
+func (s Serializer) Marshal(data common.Data) (bs []byte, err error) {
 	return json.Marshal(data)
 }
 
-func (s Serializer) Unmarshal(bs []byte) (data general.Data, err error) {
+func (s Serializer) Unmarshal(bs []byte) (data common.Data, err error) {
 	err = json.Unmarshal(bs, &data)
 	return
 }

@@ -7,12 +7,11 @@ import (
 	"github.com/mus-format/mus-go/unsafe"
 	"github.com/mus-format/mus-go/varint"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	data_protobuf_mus "github.com/ymz-ncnk/go-serialization-benchmarks/data/protobuf_mus"
 )
 
 type SerializerUnsafe struct{}
 
-func (s SerializerUnsafe) Marshal(data data_protobuf_mus.Data) (bs []byte,
+func (s SerializerUnsafe) Marshal(data Data) (bs []byte,
 	err error) {
 	var n int
 	if data.Str != "" {
@@ -62,7 +61,7 @@ func (s SerializerUnsafe) Marshal(data data_protobuf_mus.Data) (bs []byte,
 	return
 }
 
-func (s SerializerUnsafe) Unmarshal(bs []byte) (data data_protobuf_mus.Data,
+func (s SerializerUnsafe) Unmarshal(bs []byte) (data Data,
 	err error) {
 	var (
 		n, n1 int

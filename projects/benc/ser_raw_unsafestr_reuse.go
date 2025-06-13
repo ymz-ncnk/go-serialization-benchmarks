@@ -5,14 +5,14 @@ import (
 
 	bstd "github.com/deneonet/benc/std"
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 )
 
 type SerializerRawUnsafeStrReuse struct {
 	bs []byte
 }
 
-func (s SerializerRawUnsafeStrReuse) Marshal(data general.Data) (bs []byte,
+func (s SerializerRawUnsafeStrReuse) Marshal(data common.Data) (bs []byte,
 	err error) {
 	n := bstd.MarshalUnsafeString(0, s.bs, data.Str)
 	n = bstd.MarshalBool(n, s.bs, data.Bool)
@@ -23,7 +23,7 @@ func (s SerializerRawUnsafeStrReuse) Marshal(data general.Data) (bs []byte,
 	return
 }
 
-func (s SerializerRawUnsafeStrReuse) Unmarshal(bs []byte) (data general.Data,
+func (s SerializerRawUnsafeStrReuse) Unmarshal(bs []byte) (data common.Data,
 	err error) {
 	var (
 		n   int

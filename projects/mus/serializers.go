@@ -2,7 +2,7 @@ package mus
 
 import (
 	"github.com/ymz-ncnk/go-serialization-benchmarks/benchser"
-	"github.com/ymz-ncnk/go-serialization-benchmarks/data/general"
+	"github.com/ymz-ncnk/go-serialization-benchmarks/data/common"
 )
 
 const MUS = "mus"
@@ -14,7 +14,7 @@ var GeneralFeatures = []benchser.Feature{
 	benchser.UnsafeStr,
 }
 
-var Serializers = []benchser.Serializer[general.Data]{
+var Serializers = []benchser.Serializer[common.Data]{
 	SerializerRaw{},
 	SerializerRawReuse{make([]byte, benchser.BufSize)},
 	SerializerRawVarint{},

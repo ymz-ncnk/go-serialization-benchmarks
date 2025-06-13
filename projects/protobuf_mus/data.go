@@ -1,4 +1,4 @@
-package general
+package protobuf_mus
 
 import "github.com/mus-format/ext-protobuf-go"
 
