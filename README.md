@@ -92,7 +92,7 @@ go test -bench=/.+reuse
 go generate
 ```
 
-## Recomendation
+# Recomendation
 When running benchmarks on a laptop, make sure that it is connected to a charger 
 and the fan is at full speed.
 
