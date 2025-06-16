@@ -9,7 +9,7 @@ In this benchmarks:
   code.
 - Unmarshalled data is compared to the original data.
   
-## Benchmark Results
+## Results
 Benchmark results are available in [results/benchmarks.txt](results/benchmarks.txt), 
 and the corresponding `benchstat` output is in [results/benchstat.txt](results/benchstat.txt).
   
