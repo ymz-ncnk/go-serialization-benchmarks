@@ -9,9 +9,9 @@ In this benchmarks:
   code.
 - Unmarshalled data is compared to the original data.
   
-## Benchmarks
+## Benchmark Results
 Benchmark results are available in [results/benchmarks.txt](results/benchmarks.txt), 
-and the corresponding `benchstat` output can be found in [results/benchstat.txt](results/benchstat.txt).
+and the corresponding `benchstat` output is in [results/benchstat.txt](results/benchstat.txt).
   
 ## Fastest Safe
 |     NAME     |  NS/OP   | B/SIZE |  B/OP   | ALLOCS/OP |
